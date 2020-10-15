@@ -1,3 +1,10 @@
+enum MediaStatus {
+  Cancelled,
+  Finished,
+  NotYetReleased,
+  Releasing,
+}
+
 class AniListTitle {
   final String romaji;
   final String english;
@@ -27,6 +34,10 @@ class CoverImage {
   final String extraLarge;
 
   CoverImage({this.color, this.medium, this.large, this.extraLarge});
+
+  String getSmallest() {
+    return medium ?? large ?? extraLarge ?? null;
+  }
 
   factory CoverImage.fromJson(Map<String, dynamic> json) {
     return CoverImage(
@@ -104,6 +115,7 @@ class SearchResult {
   final NextAiringEpisode nextAiringEpisode;
   final Studio studios;
   final bool isAdult;
+  final MediaStatus status;
 
   SearchResult({
     this.id,
@@ -114,7 +126,38 @@ class SearchResult {
     this.nextAiringEpisode,
     this.studios,
     this.isAdult,
+    this.status,
   });
+
+  String get statusTitle {
+    switch (this.status) {
+      case MediaStatus.Cancelled:
+        return 'Cancelled';
+      case MediaStatus.Finished:
+        return 'Finished';
+      case MediaStatus.NotYetReleased:
+        return 'Not yet released';
+      case MediaStatus.Releasing:
+        return 'Releasing';
+      default:
+        return 'Status unknown';
+    }
+  }
+
+  static MediaStatus getStatusByString(String status) {
+    switch (status.toUpperCase()) {
+      case 'CANCELLED':
+        return MediaStatus.Cancelled;
+      case 'FINISHED':
+        return MediaStatus.Finished;
+      case 'NOT_YET_RELEASED':
+        return MediaStatus.NotYetReleased;
+      case 'RELEASING':
+        return MediaStatus.Releasing;
+      default:
+        return null;
+    }
+  }
 
   factory SearchResult.fromJson(Map<String, dynamic> json) {
     return SearchResult(
@@ -127,6 +170,7 @@ class SearchResult {
           NextAiringEpisode.fromJson(json['nextAiringEpisode'] ?? {}),
       studios: Studio.fromJson(json['studios'] ?? {}),
       isAdult: json['isAdult'] ?? null,
+      status: SearchResult.getStatusByString(json['status']),
     );
   }
 }

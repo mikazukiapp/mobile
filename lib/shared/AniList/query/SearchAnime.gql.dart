@@ -11,6 +11,7 @@ query searchAnime($query: String!, $type: MediaType!, $genres: [String], $onList
         extraLarge
       }
       episodes
+      status
       nextAiringEpisode {
         episode
       }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mikazuki/mobile/constants.dart';
 import 'package:mikazuki/mobile/home.dart';
-import 'package:mikazuki/mobile/navigation/bottomBar.dart';
 import 'package:mikazuki/mobile/navigation/router.dart';
 import 'package:mikazuki/mobile/search/result.dart';
 
@@ -26,11 +25,13 @@ class _MobileAppState extends State<MobileApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: homeRoute,
       onGenerateRoute: AppRouter.generateRoute,
+      darkTheme: ThemeData.dark(),
       theme: ThemeData(
-          primarySwatch: Colors.green,
-          textTheme: GoogleFonts.nunitoTextTheme(
-            Theme.of(context).textTheme,
-          )),
+        primarySwatch: Colors.green,
+        textTheme: GoogleFonts.nunitoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
       home: Scaffold(
         appBar: AppBar(
           leading: Container(

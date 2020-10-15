@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
 class Home extends StatefulWidget {

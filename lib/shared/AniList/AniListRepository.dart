@@ -39,9 +39,6 @@ class AniListRepository {
     final List<dynamic> data = result.data['page']['media'] as List<dynamic>;
     final List<SearchResult> results = [];
 
-    print(data);
-    print(result);
-
     data.forEach((element) {
       results.add(SearchResult.fromJson(element));
     });
