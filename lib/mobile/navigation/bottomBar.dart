@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:mikazuki/mobile/home.dart';
-import 'package:mikazuki/mobile/search/result.dart';
+import 'package:mikazuki/mobile/constants.dart';
 
 class BottomNavBar extends StatefulWidget {
-  BottomNavBar({Key key}) : super();
+  final int currentIndex;
+
+  BottomNavBar({Key key, this.currentIndex}) : super();
 
   @override
   BottomNavBarState createState() => BottomNavBarState();
 }
 
 class BottomNavBarState extends State {
-  int _selectedIndex = 0;
-  List<Widget> routes = [
-    Home(),
-    SearchResultPage(),
+  int _currentIndex = 0;
+  List<String> routes = [
+    homeRoute,
+    searchRoute,
   ];
 
   void _onItemTapped(BuildContext context, int index) {
     setState(() {
-      _selectedIndex = index;
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => routes[index]));
+      _currentIndex = index;
+      // Navigator.pushNamed(context, routes[index]);
     });
   }
 
@@ -31,7 +31,10 @@ class BottomNavBarState extends State {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
       ],
-      currentIndex: _selectedIndex,
+      currentIndex: _currentIndex,
+      // showSelectedLabels: true,
+      showUnselectedLabels: true,
+      // unselectedIconTheme: IconThemeData(size: 24.0),
       selectedItemColor: Colors.green[500],
       onTap: (int index) {
         return _onItemTapped(context, index);

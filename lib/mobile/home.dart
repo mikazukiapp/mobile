@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mikazuki/mobile/navigation/bottomBar.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
@@ -17,23 +16,14 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    futureResults =
-        AniListRepository.getInstance().searchAnime('Attack on Titan');
+    // futureResults =
+    //     AniListRepository.getInstance().searchAnime('Attack on Titan');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Container(
-          padding: EdgeInsets.all(8.0),
-          child: Image.asset(
-            'assets/images/AppIcon.png',
-          ),
-        ),
-        title: Text('NicoAiko'),
-      ),
-      // body: Center(
+    return Center(
+      child: Text('toast'),
       //     child: FutureBuilder<List<SearchResult>>(
       //   future: futureResults,
       //   builder: (context, snapshot) {
@@ -58,7 +48,6 @@ class HomeState extends State<Home> {
       //     return CircularProgressIndicator();
       //   },
       // )),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
