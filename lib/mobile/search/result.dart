@@ -35,13 +35,13 @@ class _SearchResultState extends State<SearchResultPage> {
 
     setState(() {
       _isLoading = true;
-      futureResults = AniListRepository
-        .getInstance()
-        .searchAnime(inputQuery).whenComplete(() {
-          setState(() {
-            _isLoading = false;
-          });
+      futureResults = AniListRepository.getInstance()
+          .searchAnime(inputQuery)
+          .whenComplete(() {
+        setState(() {
+          _isLoading = false;
         });
+      });
     });
   }
 
@@ -53,35 +53,36 @@ class _SearchResultState extends State<SearchResultPage> {
           padding: EdgeInsets.only(left: 8.0, right: 8.0),
           margin: EdgeInsets.only(bottom: 2.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
-            color: Theme.of(context).primaryColor,
-            boxShadow: <BoxShadow>[
-              BoxShadow(blurRadius: 2.0, color: Colors.black)
-            ]
-          ),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12)),
+              color: Theme.of(context).primaryColor,
+              boxShadow: <BoxShadow>[
+                BoxShadow(blurRadius: 2.0, color: Colors.black)
+              ]),
           child: TextField(
             autocorrect: false,
             controller: _controller,
             onSubmitted: onSearch,
-            // style: TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              // labelStyle: TextStyle(color: Colors.white),
-              // hintStyle: TextStyle(color: Colors.white),
               hintText: 'Title, Genre, Synonyms...',
               labelText: 'Search query',
-              prefixIcon: !_isLoading ?
-                Icon(Icons.search, color: Colors.white,) :
-                SizedBox(
-                  height: 24.0,
-                  width: 24.0,
-                  child: Transform.scale(
-                    scale: 0.5,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 5.0,
-                      semanticsLabel: 'Search Loading Indicator',
+              prefixIcon: !_isLoading
+                  ? Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    )
+                  : SizedBox(
+                      height: 24.0,
+                      width: 24.0,
+                      child: Transform.scale(
+                        scale: 0.5,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 5.0,
+                          semanticsLabel: 'Search Loading Indicator',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               suffixIcon: IconButton(
                 icon: Icon(Icons.clear, color: Colors.white),
                 onPressed: () => _controller.clear(),
@@ -97,7 +98,9 @@ class _SearchResultState extends State<SearchResultPage> {
               if (snapshot.hasData) {
                 return ListView(
                   padding: EdgeInsets.all(12.0),
-                  children: snapshot.data.map((result) => SearchResultItem(result)).toList(),
+                  children: snapshot.data
+                      .map((result) => SearchResultItem(result))
+                      .toList(),
                 );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
