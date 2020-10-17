@@ -45,42 +45,28 @@ class _MobileAppState extends State<MobileApp> {
         initialRoute: homeRoute,
         onGenerateRoute: AppRouter.generateRoute,
         themeMode: appTheme.currentTheme(),
-        darkTheme: ThemeData.dark().copyWith(
-          textTheme: GoogleFonts.nunitoTextTheme(
-            Theme.of(context).textTheme,
-          ),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        theme: ThemeData.light().copyWith(
-          inputDecorationTheme: InputDecorationTheme(
-            hintStyle: GoogleFonts.nunitoTextTheme().caption,
-            helperStyle: GoogleFonts.nunitoTextTheme().caption,
-            labelStyle: GoogleFonts.nunitoTextTheme().caption,
-          ),
-          textTheme: GoogleFonts.nunitoTextTheme(
-            Theme.of(context).textTheme,
-          ),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            leading: Container(
-              padding: EdgeInsets.all(8.0),
-              child: Image.asset(
-                'assets/images/AppIcon.png',
-              ),
-            ),
-            title: Text('NicoAiko'),
-            actions: [
-              IconButton(
-                  icon: appTheme.currentTheme() == ThemeMode.light
-                      ? Icon(Icons.lightbulb, color: Colors.yellow)
-                      : Icon(Icons.lightbulb_outline, color: Colors.white),
-                  onPressed: () {
-                    appTheme.switchTheme();
-                  })
-            ],
-          ),
+        darkTheme: ThemeData.localize(ThemeData.dark(), GoogleFonts.nunitoTextTheme()),
+        theme: ThemeData.localize(ThemeData.light().copyWith(primaryColor: Colors.green), GoogleFonts.nunitoTextTheme()),
+        home: SafeArea(child: Scaffold(
+          // appBar: AppBar(
+          //   elevation: 0,
+          //   leading: Container(
+          //     padding: EdgeInsets.all(8.0),
+          //     child: Image.asset(
+          //       'assets/images/AppIcon.png',
+          //     ),
+          //   ),
+          //   title: Text('NicoAiko'),
+          //   actions: [
+          //     IconButton(
+          //         icon: appTheme.currentTheme() == ThemeMode.light
+          //             ? Icon(Icons.lightbulb, color: Colors.yellow)
+          //             : Icon(Icons.lightbulb_outline, color: Colors.white),
+          //         onPressed: () {
+          //           appTheme.switchTheme();
+          //         })
+          //   ],
+          // ),
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -89,6 +75,8 @@ class _MobileAppState extends State<MobileApp> {
             ],
             currentIndex: _currentIndex,
             selectedItemColor: Colors.green[500],
+            showUnselectedLabels: false,
+            showSelectedLabels: false,
             onTap: (int index) {
               setState(() {
                 _currentIndex = index;
@@ -97,7 +85,7 @@ class _MobileAppState extends State<MobileApp> {
           ),
           body: _widgetOptions.elementAt(_currentIndex),
         ),
-      ),
+      )),
     );
   }
 }

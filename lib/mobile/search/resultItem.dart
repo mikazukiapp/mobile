@@ -52,7 +52,7 @@ class SearchResultItem extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(flex: 2, child: Text(item.title.userPreferred)),
+                      Expanded(flex: 2, child: Text(item.title.userPreferred, maxLines: 3,)),
                       Container(
                         padding: EdgeInsets.only(left: 4.0),
                         child: Row(

@@ -50,28 +50,30 @@ class _SearchResultState extends State<SearchResultPage> {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 8.0, right: 8.0),
+          // padding: EdgeInsets.only(left: 4.0, right: 4.0),
           margin: EdgeInsets.only(bottom: 2.0),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12)),
-              color: Theme.of(context).primaryColor,
-              boxShadow: <BoxShadow>[
-                BoxShadow(blurRadius: 2.0, color: Colors.black)
-              ]),
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(12),
+              bottomRight: Radius.circular(12),
+            ),
+            boxShadow: <BoxShadow>[
+              BoxShadow(blurRadius: 2.0, color: Colors.black)
+            ],
+          ),
           child: TextField(
             autocorrect: false,
             controller: _controller,
             onSubmitted: onSearch,
+            style: Theme.of(context).primaryTextTheme.subtitle1,
             decoration: InputDecoration(
+              hintStyle: Theme.of(context).primaryTextTheme.subtitle1,
+              labelStyle: Theme.of(context).primaryTextTheme.subtitle1,
               hintText: 'Title, Genre, Synonyms...',
               labelText: 'Search query',
               prefixIcon: !_isLoading
-                  ? Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    )
+                  ? Icon(Icons.search, color: Theme.of(context).primaryIconTheme.color)
                   : SizedBox(
                       height: 24.0,
                       width: 24.0,
@@ -80,11 +82,12 @@ class _SearchResultState extends State<SearchResultPage> {
                         child: CircularProgressIndicator(
                           strokeWidth: 5.0,
                           semanticsLabel: 'Search Loading Indicator',
+                          valueColor: new AlwaysStoppedAnimation(Theme.of(context).primaryIconTheme.color),
                         ),
                       ),
                     ),
               suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: Colors.white),
+                icon: Icon(Icons.clear, color: Theme.of(context).primaryIconTheme.color),
                 onPressed: () => _controller.clear(),
               ),
               border: InputBorder.none,
