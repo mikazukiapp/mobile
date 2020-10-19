@@ -36,11 +36,32 @@ class _LoginViewState extends State<LoginView> {
                 Image.asset('assets/images/AppIcon.png'),
                 Text('Welcome to Mikazuki!'),
                 Text('To effectively use Mikazuki, please log in to AniList.'),
-                RaisedButton(
-                  child: Text('Login'),
-                  onPressed: () => print('login page of anilist'),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: RaisedButton(
+                    onPressed: () => print('login page of anilist'),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    padding: EdgeInsets.all(0),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.green,
+                            Colors.lightBlue,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Container(
+                        constraints:
+                            BoxConstraints(minWidth: 88.0, minHeight: 36.0),
+                        alignment: Alignment.center,
+                        child: Text('Login', textAlign: TextAlign.center),
+                      ),
+                    ),
                   ),
                 ),
                 TextButton(
