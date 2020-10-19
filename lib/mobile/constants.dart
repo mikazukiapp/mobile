@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const String homeRoute = '/';
 const String searchRoute = '/search';
+const String loginRoute = '/login';
 
 const MaterialColor kPrimarySwatch = Colors.teal;
 const Color kLightModePrimaryColor = Color(0xFF000000);
