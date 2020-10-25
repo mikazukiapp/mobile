@@ -32,12 +32,16 @@ dependencies:
   http: ^0.12.2
   graphql: ^3.0.0
   provider: ^3.0.0
+  flutter_secure_storage: ^3.3.5
+  url_launcher: ^5.7.8
+  uni_links: ^0.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.8.1
   flutter_launcher_name: ^0.0.1
+  flutter_dotenv: ^2.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -54,6 +58,7 @@ flutter:
   assets:
     - assets/images/AppIcon.png
     - assets/images/login_background.jpg
+    - .env
 
   fonts:
     - family: Nunito
