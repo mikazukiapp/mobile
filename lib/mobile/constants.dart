@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String AniListAuthURL = 'https://anilist.co/api/v2/oauth/authorize?client_id={client_id}&response_type=token';
+
 const String homeRoute = '/';
 const String searchRoute = '/search';
 const String loginRoute = '/login';
