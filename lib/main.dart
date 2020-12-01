@@ -31,6 +31,7 @@ class _MikazukiApp extends State<MikazukiApp> {
 
       print('Subscription-based Deep link incoming $link');
       String accessToken = link.fragment;
+      print('access_token=$accessToken');
 
       if (accessToken.startsWith('access_token=')) {
         accessToken = accessToken.substring(13);
