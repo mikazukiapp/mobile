@@ -48,3 +48,6 @@ app.*.map.json
 # Environment files
 .env
 .env.*
+
+# VSCode stuff
+.vscode/
