@@ -59,7 +59,7 @@ class _MobileAppState extends State<MobileApp> {
                 'assets/images/AppIcon.png',
               ),
             ),
-            title: Text('NicoAiko'),
+            title: Text('Mikazuki'),
             actions: [
               IconButton(
                   icon: appTheme.currentTheme() == ThemeMode.light
