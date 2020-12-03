@@ -6,6 +6,8 @@ import 'package:mikazuki/mobile/home.dart';
 import 'package:mikazuki/mobile/navigation/router.dart';
 import 'package:mikazuki/mobile/search/result.dart';
 
+import 'constants.dart';
+
 class MobileApp extends StatefulWidget {
   @override
   _MobileAppState createState() => _MobileAppState();
@@ -42,7 +44,7 @@ class _MobileAppState extends State<MobileApp> {
       child: MaterialApp(
         title: 'Mikazuki',
         debugShowCheckedModeBanner: false,
-        initialRoute: loginRoute,
+        initialRoute: loadingScreenRoute,
         onGenerateRoute: AppRouter.generateRoute,
         themeMode: appTheme.currentTheme(),
         darkTheme:

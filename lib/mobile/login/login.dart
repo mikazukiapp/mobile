@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mikazuki/mobile/constants.dart';
 
@@ -11,32 +10,14 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  FlutterSecureStorage _secureStore;
-
   void _launchAniListLoginSequence() async {
     String url = AniListAuthURL.replaceAll('{client_id}', DotEnv().env['CLIENT_ID']);
     
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Couldn\'t launch $url';
+      throw "Couldn't launch $url";
     }
-  }
-
-  void _performLoginCheck() async {
-    bool isTokenSet = (await _secureStore.read(key: 'anilist_token')).isNotEmpty;
-
-    if (isTokenSet) {
-      Navigator.of(context).pushReplacementNamed(homeRoute);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _secureStore = new FlutterSecureStorage();
-
-    _performLoginCheck();
   }
 
   @override
