@@ -1,18 +1,55 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mikazuki/mobile/app.dart';
+import 'package:mikazuki/mobile/pages/search.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mikazuki/mobile/constants.dart';
 
-class LoginView extends StatefulWidget {
+class LoginScreenWidget extends StatefulWidget {
   @override
-  _LoginViewState createState() => _LoginViewState();
+  _LoginScreenWidgetState createState() => _LoginScreenWidgetState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginScreenWidgetState extends State<LoginScreenWidget> {
+  FlutterSecureStorage _secureStorage;
+  StreamSubscription _sub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _secureStorage = new FlutterSecureStorage();
+
+    this.initUniLinks();
+  }
+
+  Future<Null> initUniLinks() async {
+    _sub = getUriLinksStream().listen((Uri link) async {
+      if (!mounted) {
+        return;
+      }
+
+      String accessToken = link.fragment;
+
+      if (accessToken.startsWith('access_token=')) {
+        accessToken = accessToken.substring(13);
+        await _secureStorage.write(key: 'anilist_token', value: accessToken);
+
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MobileApp()), (route) => false);
+        _sub.cancel();
+      }
+    }, onError: (err) {
+      print(err);
+    });
+  }
+
   void _launchAniListLoginSequence() async {
     String url = AniListAuthURL.replaceAll('{client_id}', DotEnv().env['CLIENT_ID']);
-    
+
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -78,7 +115,7 @@ class _LoginViewState extends State<LoginView> {
                 TextButton(
                   child: Text('Continue without login'),
                   onPressed: () =>
-                      Navigator.of(context).pushReplacementNamed(homeRoute),
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SearchScreenWidget())),
                 ),
               ],
             ),

@@ -6,6 +6,7 @@ import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 class AniListRepository {
   static AniListRepository _instance;
   GraphQLClient _gqlClient;
+  bool isLoggedIn = false;
 
   AniListRepository._internal() {
     HttpLink link = HttpLink(uri: 'https://graphql.anilist.co/');

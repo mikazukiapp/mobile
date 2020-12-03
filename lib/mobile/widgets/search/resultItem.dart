@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../shared/AniList/types/SearchResult.dart';
+import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
 class SearchResultItem extends StatelessWidget {
   SearchResultItem(this.item);
@@ -77,7 +77,7 @@ class SearchResultItem extends StatelessWidget {
                   ),
                   Spacer(),
                   Text(
-                    '${item.episodes.toString()} episodes',
+                    '${item.episodes?.toString() ?? "Unknown amount of"} episodes',
                     style: TextStyle(
                       // color: Colors.grey[700],
                       fontSize: 12.0,
