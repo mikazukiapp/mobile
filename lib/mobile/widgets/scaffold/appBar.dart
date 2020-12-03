@@ -38,6 +38,7 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
           icon: Icon(AniListRepository.getInstance().isLoggedIn ? Icons.logout : Icons.login),
           onPressed: () {
             if (AniListRepository.getInstance().isLoggedIn) {
+              AniListRepository.getInstance().isLoggedIn = false;
               SecureStorageActions.delete('anilist_token');
               Navigator.pushAndRemoveUntil(
                 context,
