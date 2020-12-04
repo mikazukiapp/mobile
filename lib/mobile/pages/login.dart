@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mikazuki/mobile/app.dart';
 import 'package:mikazuki/mobile/pages/search.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mikazuki/mobile/constants.dart';
 
 class LoginScreenWidget extends StatefulWidget {
   @override
@@ -38,9 +38,14 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
       if (accessToken.startsWith('access_token=')) {
         accessToken = accessToken.substring(13);
         await _secureStorage.write(key: 'anilist_token', value: accessToken);
+        print('Logged in...');
 
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MobileApp()), (route) => false);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MobileApp()),
+            (route) => false);
         _sub.cancel();
+        closeWebView();
       }
     }, onError: (err) {
       print(err);
@@ -48,12 +53,23 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
   }
 
   void _launchAniListLoginSequence() async {
-    String url = AniListAuthURL.replaceAll('{client_id}', DotEnv().env['CLIENT_ID']);
+    final Uri uri = Uri.https("anilist.co", "/api/v2/oauth/authorize", {
+      'client_id': DotEnv().env['CLIENT_ID'],
+      'response_type': 'token',
+    });
 
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunch(uri.toString())) {
+      try {
+        await launch(uri.toString(),
+            forceSafariVC: true,
+            forceWebView: true,
+            enableJavaScript: true,
+            universalLinksOnly: false);
+      } on PlatformException catch (exception) {
+        print(exception);
+      }
     } else {
-      throw "Couldn't launch $url";
+      throw "Couldn't launch ${uri.toString()}";
     }
   }
 
@@ -114,8 +130,9 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
                 ),
                 TextButton(
                   child: Text('Continue without login'),
-                  onPressed: () =>
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SearchScreenWidget())),
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => SearchScreenWidget())),
                 ),
               ],
             ),
