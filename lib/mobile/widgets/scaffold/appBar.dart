@@ -35,29 +35,31 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
       title: Text(_title),
       actions: <Widget>[
         IconButton(
-          icon: Icon(AniListRepository.getInstance().isLoggedIn ? Icons.logout : Icons.login),
-          onPressed: () {
-            if (AniListRepository.getInstance().isLoggedIn) {
-              AniListRepository.getInstance().isLoggedIn = false;
-              SecureStorageActions.delete('anilist_token');
-              Navigator.pushAndRemoveUntil(
-                context,
-                NoAnimationMaterialPageRoute(
-                  builder: (BuildContext context) => LoginScreenWidget()
-                ),
-                (route) => false
-              );
-            } else {
-              Navigator.pushNamed(context, '/login');
-            }
-          }
-        ),
+            icon: Icon(AniListRepository.getInstance().isLoggedIn
+                ? Icons.logout
+                : Icons.login),
+            onPressed: () {
+              if (AniListRepository.getInstance().isLoggedIn) {
+                print('Logging out...');
+                AniListRepository.getInstance().isLoggedIn = false;
+                SecureStorageActions.delete('anilist_token');
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    NoAnimationMaterialPageRoute(
+                        builder: (BuildContext context) => LoginScreenWidget()),
+                    (route) => false);
+              } else {
+                Navigator.pushNamed(context, '/login');
+              }
+            }),
         IconButton(
             icon: appTheme.currentTheme() == ThemeMode.light
                 ? Icon(Icons.lightbulb, color: Colors.yellow)
                 : Icon(Icons.lightbulb_outline, color: Colors.white),
             onPressed: () {
-              appTheme.switchTheme();
+              setState(() {
+                appTheme.switchTheme();
+              });
             })
       ],
     );

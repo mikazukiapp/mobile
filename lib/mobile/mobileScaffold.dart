@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mikazuki/mobile/config.dart';
 import 'package:mikazuki/mobile/widgets/scaffold/appBar.dart';
-import 'package:mikazuki/mobile/widgets/scaffold/bottomNavigationBar.dart';
+// import 'package:mikazuki/mobile/widgets/scaffold/bottomNavigationBar.dart';
 
 class MikazukiScaffold extends StatefulWidget {
   final Widget _body;
 
-  MikazukiScaffold({ @required Widget body }) : _body = body;
+  MikazukiScaffold({@required Widget body}) : _body = body;
 
   @override
   State<StatefulWidget> createState() => _MikazukiScaffoldState(_body);
@@ -22,7 +22,9 @@ class _MikazukiScaffoldState extends State<MikazukiScaffold> {
     super.initState();
 
     appTheme.addListener(() {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
