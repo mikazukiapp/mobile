@@ -1,12 +1,22 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:mikazuki/shared/AniList/query/SearchAnime.gql.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
-class AniListRepository {
+class AniListRepository with ChangeNotifier {
   static AniListRepository _instance;
   GraphQLClient _gqlClient;
-  bool isLoggedIn = false;
+  bool _isLoggedIn = false;
+
+  get isLoggedIn {
+    return this._isLoggedIn;
+  }
+
+  set isLoggedIn(bool value) {
+    this._isLoggedIn = value;
+    notifyListeners();
+  }
 
   AniListRepository._internal() {
     HttpLink link = HttpLink(uri: 'https://graphql.anilist.co/');
