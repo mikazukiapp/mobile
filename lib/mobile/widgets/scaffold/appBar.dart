@@ -35,6 +35,12 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
       title: Text(_title),
       actions: <Widget>[
         IconButton(
+          icon: Icon(Icons.list),
+          onPressed: () {
+            AniListRepository.getInstance().getUserAnimeLists();
+          },
+        ),
+        IconButton(
             icon: Icon(AniListRepository.getInstance().isLoggedIn
                 ? Icons.logout
                 : Icons.login),
@@ -42,6 +48,7 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
               if (AniListRepository.getInstance().isLoggedIn) {
                 print('Logging out...');
                 AniListRepository.getInstance().isLoggedIn = false;
+                AniListRepository.getInstance().removeToken();
                 SecureStorageActions.delete('anilist_token');
                 Navigator.pushAndRemoveUntil(
                     context,

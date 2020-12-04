@@ -17,6 +17,7 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
     _secureStorage.read(key: 'anilist_token').then((token) {
       if (token != null && token.isNotEmpty) {
         AniListRepository.getInstance().isLoggedIn = true;
+        AniListRepository.getInstance().setToken(token);
 
         Navigator.of(context).pushAndRemoveUntil(NoAnimationMaterialPageRoute(builder: (context) => SearchScreenWidget()), (route) => false);
       } else {
