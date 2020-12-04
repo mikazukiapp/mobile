@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
-import 'package:mikazuki/mobile/search/resultItem.dart';
+import 'package:mikazuki/mobile/widgets/search/resultItem.dart';
 
-class SearchResultPage extends StatefulWidget {
-  SearchResultPage({Key key}) : super();
+class SearchResultWidget extends StatefulWidget {
+  SearchResultWidget({Key key}) : super();
 
   @override
-  _SearchResultState createState() => _SearchResultState();
+  _SearchResultWidgetState createState() => _SearchResultWidgetState();
 }
 
-class _SearchResultState extends State<SearchResultPage> {
+class _SearchResultWidgetState extends State<SearchResultWidget> {
   Future<List<SearchResult>> futureResults;
   List<SearchResult> results;
   TextEditingController _controller;

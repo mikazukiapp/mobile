@@ -1,42 +1,76 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mikazuki/mobile/app.dart';
+import 'package:mikazuki/mobile/pages/search.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mikazuki/mobile/constants.dart';
 
-class LoginView extends StatefulWidget {
+class LoginScreenWidget extends StatefulWidget {
   @override
-  _LoginViewState createState() => _LoginViewState();
+  _LoginScreenWidgetState createState() => _LoginScreenWidgetState();
 }
 
-class _LoginViewState extends State<LoginView> {
-  FlutterSecureStorage _secureStore;
-
-  void _launchAniListLoginSequence() async {
-    String url = AniListAuthURL.replaceAll('{client_id}', DotEnv().env['CLIENT_ID']);
-    
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Couldn\'t launch $url';
-    }
-  }
-
-  void _performLoginCheck() async {
-    bool isTokenSet = (await _secureStore.read(key: 'anilist_token')).isNotEmpty;
-
-    if (isTokenSet) {
-      Navigator.of(context).pushReplacementNamed(homeRoute);
-    }
-  }
+class _LoginScreenWidgetState extends State<LoginScreenWidget> {
+  FlutterSecureStorage _secureStorage;
+  StreamSubscription _sub;
 
   @override
   void initState() {
     super.initState();
-    _secureStore = new FlutterSecureStorage();
 
-    _performLoginCheck();
+    _secureStorage = new FlutterSecureStorage();
+
+    this.initUniLinks();
+  }
+
+  Future<Null> initUniLinks() async {
+    _sub = getUriLinksStream().listen((Uri link) async {
+      if (!mounted) {
+        return;
+      }
+
+      String accessToken = link.fragment;
+
+      if (accessToken.startsWith('access_token=')) {
+        accessToken = accessToken.substring(13);
+        await _secureStorage.write(key: 'anilist_token', value: accessToken);
+        print('Logged in...');
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MobileApp()),
+            (route) => false);
+        _sub.cancel();
+        closeWebView();
+      }
+    }, onError: (err) {
+      print(err);
+    });
+  }
+
+  void _launchAniListLoginSequence() async {
+    final Uri uri = Uri.https("anilist.co", "/api/v2/oauth/authorize", {
+      'client_id': DotEnv().env['CLIENT_ID'],
+      'response_type': 'token',
+    });
+
+    if (await canLaunch(uri.toString())) {
+      try {
+        await launch(uri.toString(),
+            forceSafariVC: true,
+            forceWebView: true,
+            enableJavaScript: true,
+            universalLinksOnly: false);
+      } on PlatformException catch (exception) {
+        print(exception);
+      }
+    } else {
+      throw "Couldn't launch ${uri.toString()}";
+    }
   }
 
   @override
@@ -96,8 +130,9 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 TextButton(
                   child: Text('Continue without login'),
-                  onPressed: () =>
-                      Navigator.of(context).pushReplacementNamed(homeRoute),
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => SearchScreenWidget())),
                 ),
               ],
             ),
