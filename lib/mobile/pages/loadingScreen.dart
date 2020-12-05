@@ -4,6 +4,7 @@ import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/pages/search.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
+import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
 
 class LoadingScreenWidget extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
     _secureStorage.read(key: 'anilist_token').then((token) {
       if (token != null && token.isNotEmpty) {
         AniListRepository.getInstance().isLoggedIn = true;
-        AniListRepository.getInstance().setToken(token);
+        GraphQLConfiguration.setToken(token);
 
         Navigator.of(context).pushAndRemoveUntil(NoAnimationMaterialPageRoute(builder: (context) => SearchScreenWidget()), (route) => false);
       } else {

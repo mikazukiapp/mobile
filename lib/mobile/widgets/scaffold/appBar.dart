@@ -3,6 +3,7 @@ import 'package:mikazuki/mobile/config.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
+import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
 import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 import 'package:mikazuki/shared/Storage/actions.dart';
 
@@ -38,7 +39,8 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
         IconButton(
           icon: Icon(Icons.list),
           onPressed: () {
-            AniListRepository.getInstance().getUserListByStatus(AniListUserListStatus.Completed);
+            AniListRepository.getInstance().getUserListByStatus(AniListUserListStatus.Current);
+            // AniListRepository.getInstance().getUserAnimeLists();
           },
         ),
         IconButton(
@@ -49,7 +51,7 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
               if (AniListRepository.getInstance().isLoggedIn) {
                 print('Logging out...');
                 AniListRepository.getInstance().isLoggedIn = false;
-                AniListRepository.getInstance().removeToken();
+                GraphQLConfiguration.removeToken();
                 SecureStorageActions.delete('anilist_token');
                 Navigator.pushAndRemoveUntil(
                     context,
