@@ -1,6 +1,6 @@
 const String GetUserLists = r'''
-query getUserLists($userName: String!, $type: MediaType!) {
-  collection: MediaListCollection(userName: $userName, type: $type) {
+query getUserLists($userName: String!, $type: MediaType!, $status: [MediaListStatus]) {
+  collection: MediaListCollection(userName: $userName, type: $type, status_in: $status) {
     lists {
       name
       status
