@@ -1,10 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:mikazuki/shared/AniList/query/GetUserListByStatus.gql.dart';
 import 'package:mikazuki/shared/AniList/query/GetUserLists.gql.dart';
 import 'package:mikazuki/shared/AniList/query/SearchAnime.gql.dart';
+import 'package:mikazuki/shared/AniList/types/MediaType.dart';
+import 'package:mikazuki/shared/AniList/types/PageInfo.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 import 'package:mikazuki/shared/AniList/types/UserList.dart';
+import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
+import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 
 class AniListRepository with ChangeNotifier {
   final HttpLink _httpLink = HttpLink(uri: 'https://graphql.anilist.co/');
@@ -70,6 +77,7 @@ class AniListRepository with ChangeNotifier {
     return results;
   }
 
+  // TODO: Set proper Future typing
   Future<dynamic> getUserAnimeLists() async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(GetUserLists),
@@ -94,5 +102,44 @@ class AniListRepository with ChangeNotifier {
     });
 
     print(lists);
+  }
+
+  // TODO: Set proper Future typing
+  Future<dynamic> getUserListByStatus(AniListUserListStatus status, {@JsonKey(unknownEnumValue: AniListMediaType.Anime) AniListMediaType type = AniListMediaType.Anime}) async {
+    Map<String, dynamic> variables = <String, dynamic> {
+      // TODO: change username to logged in user's
+      'username': 'NicoAiko',
+      'type': json.encode(type),
+      'status': status,
+    };
+
+    final QueryOptions options = QueryOptions(documentNode: gql(GetUserListByStatus));
+
+    final List<AniListUserListEntry> userListEntries = [];
+    QueryResult result;
+    PageInfo pageInfo;
+    dynamic page;
+    int pageNumber = 0;
+
+    do {
+      variables['page'] = ++pageNumber;
+      options.variables = variables;
+
+      result = await _gqlClient.query(options);
+      page = result.data['page'];
+      pageInfo = PageInfo.fromJson(page['pageInfo']);
+
+      if (result.hasException) {
+        print(result.exception.toString());
+      }
+
+      (page['mediaList'] as List<dynamic>).forEach((element) {
+        userListEntries.add(AniListUserListEntry.fromJson(element));
+      });
+    } while (pageInfo.hasNextPage);
+
+    AniListUserList list = AniListUserList(entries: userListEntries, status: status);
+
+    print(list);
   }
 }
