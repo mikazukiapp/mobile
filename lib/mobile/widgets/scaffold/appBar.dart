@@ -4,7 +4,6 @@ import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
-import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 import 'package:mikazuki/shared/Storage/actions.dart';
 
 class MikazukiAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -36,13 +35,6 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
       ),
       title: Text(_title),
       actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.list),
-          onPressed: () {
-            AniListRepository.getInstance().getUserListByStatus(AniListUserListStatus.Current);
-            // AniListRepository.getInstance().getUserAnimeLists();
-          },
-        ),
         IconButton(
             icon: Icon(AniListRepository.getInstance().isLoggedIn
                 ? Icons.logout
