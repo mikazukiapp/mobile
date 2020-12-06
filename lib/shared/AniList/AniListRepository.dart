@@ -102,12 +102,12 @@ class AniListRepository with ChangeNotifier {
     return results;
   }
 
-  Future<List<AniListUserList>> getUserAnimeLists() async {
+  Future<List<AniListUserList>> getUserLists({AniListMediaType type = AniListMediaType.Anime}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(GetUserLists),
       variables: <String, dynamic>{
         'userName': this.username,
-        'type': 'ANIME',
+        'type': getStringifiedAniListMediaType(type),
       },
     );
 
