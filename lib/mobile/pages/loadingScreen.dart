@@ -4,6 +4,8 @@ import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/pages/search.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
+import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
+import 'package:mikazuki/shared/AniList/types/User.dart';
 
 class LoadingScreenWidget extends StatefulWidget {
   @override
@@ -14,9 +16,9 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
   FlutterSecureStorage _secureStorage = new FlutterSecureStorage();
 
   _LoadingScreenWidget() {
-    _secureStorage.read(key: 'anilist_token').then((token) {
+    _secureStorage.read(key: 'anilist_token').then((token) async {
       if (token != null && token.isNotEmpty) {
-        AniListRepository.getInstance().isLoggedIn = true;
+        _setAniListConfigurations(token);
 
         Navigator.of(context).pushAndRemoveUntil(NoAnimationMaterialPageRoute(builder: (context) => SearchScreenWidget()), (route) => false);
       } else {
@@ -34,5 +36,14 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
         child: CircularProgressIndicator(),
       ),
     );
+  }
+
+  void _setAniListConfigurations(String token) {
+    GraphQLConfiguration.setToken(token);
+    AniListRepository.getInstance().isLoggedIn = true;
+
+    AniListRepository.getInstance().getUserData().then((AniListUser user) {
+      AniListRepository.getInstance().username = user.name;
+    });
   }
 }

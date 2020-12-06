@@ -33,7 +33,9 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
         return;
       }
 
-      String accessToken = link.fragment;
+      String fragment = link.fragment;
+      List<String> fragmentParts = fragment.split('&');
+      String accessToken = fragmentParts.elementAt(0);
 
       if (accessToken.startsWith('access_token=')) {
         accessToken = accessToken.substring(13);
@@ -60,11 +62,12 @@ class _LoginScreenWidgetState extends State<LoginScreenWidget> {
 
     if (await canLaunch(uri.toString())) {
       try {
-        await launch(uri.toString(),
-            forceSafariVC: true,
-            forceWebView: true,
-            enableJavaScript: true,
-            universalLinksOnly: false);
+        // await launch(uri.toString(),
+        //     forceSafariVC: true,
+        //     forceWebView: true,
+        //     enableJavaScript: true,
+        //     universalLinksOnly: false);
+        await launch(uri.toString());
       } on PlatformException catch (exception) {
         print(exception);
       }
