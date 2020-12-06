@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'Title.g.dart';
+
+@JsonSerializable()
 class AniListTitle {
   final String romaji;
   final String english;
@@ -11,11 +16,6 @@ class AniListTitle {
     this.userPreferred,
   });
 
-  factory AniListTitle.fromJson(Map<String, dynamic> json) {
-    return AniListTitle(
-        english: json['english'] ?? null,
-        romaji: json['romaji'] ?? null,
-        native: json['native'] ?? null,
-        userPreferred: json['userPreferred'] ?? null);
-  }
+  factory AniListTitle.fromJson(Map<String, dynamic> json) => _$AniListTitleFromJson(json);
+  Map<String, dynamic> toJson() => _$AniListTitleToJson(this);
 }

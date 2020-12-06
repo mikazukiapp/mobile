@@ -1,6 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
 import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 
+part 'UserList.g.dart';
+
+@JsonSerializable()
 class AniListUserList {
   final String name;
   final AniListUserListStatus status;
@@ -12,18 +16,21 @@ class AniListUserList {
     this.entries,
   });
 
-  factory AniListUserList.fromJson(Map<String, dynamic> json) {
-    final List<AniListUserListEntry> entries = [];
-    (json['entries'] ?? []).forEach((element) {
-      entries.add(AniListUserListEntry.fromJson(element));
-    });
+  factory AniListUserList.fromJson(Map<String, dynamic> json) => _$AniListUserListFromJson(json);
+  Map<String, dynamic> toJson() => _$AniListUserListToJson(this);
 
-    return AniListUserList(
-      name: json['name'] ?? null,
-      status: getAniListUserListStatusByJsonValue(json['status']),
-      entries: entries,
-    );
-  }
+  // factory AniListUserList.fromJson(Map<String, dynamic> json) {
+  //   final List<AniListUserListEntry> entries = [];
+  //   (json['entries'] ?? []).forEach((element) {
+  //     entries.add(AniListUserListEntry.fromJson(element));
+  //   });
+
+  //   return AniListUserList(
+  //     name: json['name'] ?? null,
+  //     status: getAniListUserListStatusByJsonValue(json['status']),
+  //     entries: entries,
+  //   );
+  // }
 
   @override
   String toString() {

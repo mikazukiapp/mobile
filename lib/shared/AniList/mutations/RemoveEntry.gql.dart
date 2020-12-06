@@ -1,6 +1,6 @@
 const String RemoveEntry = r'''
-mutation removeEntry($id: Int!) {
-  DeleteMediaListEntry(id: $id) {
+mutation removeEntry($entryId: Int!) {
+  DeleteMediaListEntry(id: $entryId) {
     deleted
   }
 }
