@@ -9,6 +9,7 @@ part 'UserListEntry.g.dart';
 class AniListUserListEntry {
   final int id;
   final int progress;
+  final int progressVolumes;
   final AniListUserListStatus status;
   final double score;
   final int updatedAt; // Timestamp
@@ -19,6 +20,7 @@ class AniListUserListEntry {
   AniListUserListEntry({
     this.id,
     this.progress,
+    this.progressVolumes,
     this.status,
     this.score,
     this.updatedAt,
@@ -29,15 +31,4 @@ class AniListUserListEntry {
 
   factory AniListUserListEntry.fromJson(Map<String, dynamic> json) => _$AniListUserListEntryFromJson(json);
   Map<String, dynamic> toJson() => _$AniListUserListEntryToJson(this);
-
-  // factory AniListUserListEntry.fromJson(Map<String, dynamic> json) {
-  //   return AniListUserListEntry(
-  //     id: json['id'] ?? null,
-  //     progress: json['progress'] ?? null,
-  //     score: json['score'].toDouble() ?? null,
-  //     updatedAt: json['updatedAt'] ?? null,
-  //     status: getAniListUserListStatusByJsonValue(json['status']),
-  //     media: AniListMedia.fromJson(json['media'] ?? {}),
-  //   );
-  // }
 }

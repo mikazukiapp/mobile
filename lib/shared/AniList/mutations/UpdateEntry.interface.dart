@@ -8,6 +8,7 @@ part 'UpdateEntry.interface.g.dart';
 class IUpdateEntry {
   final int entryId;
   int progress;
+  int progressVolumes;
   double score;
   AniListUserListStatus status;
   AniListDateInput startedAt;
@@ -16,6 +17,7 @@ class IUpdateEntry {
   IUpdateEntry({
     this.entryId,
     this.progress,
+    this.progressVolumes,
     this.score,
     this.status,
     this.startedAt,

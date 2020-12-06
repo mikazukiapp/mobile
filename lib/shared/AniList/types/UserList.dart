@@ -19,19 +19,6 @@ class AniListUserList {
   factory AniListUserList.fromJson(Map<String, dynamic> json) => _$AniListUserListFromJson(json);
   Map<String, dynamic> toJson() => _$AniListUserListToJson(this);
 
-  // factory AniListUserList.fromJson(Map<String, dynamic> json) {
-  //   final List<AniListUserListEntry> entries = [];
-  //   (json['entries'] ?? []).forEach((element) {
-  //     entries.add(AniListUserListEntry.fromJson(element));
-  //   });
-
-  //   return AniListUserList(
-  //     name: json['name'] ?? null,
-  //     status: getAniListUserListStatusByJsonValue(json['status']),
-  //     entries: entries,
-  //   );
-  // }
-
   @override
   String toString() {
     return [this.name, ...this.entries.map((entry) => entry.media.title.romaji)].join(', ');

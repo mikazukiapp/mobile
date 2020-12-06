@@ -17,6 +17,7 @@ query getUserListByStatus($username: String!, $type: MediaType!, $status: MediaL
       media {
         id
         episodes
+        type
         coverImage {
           extraLarge
         }

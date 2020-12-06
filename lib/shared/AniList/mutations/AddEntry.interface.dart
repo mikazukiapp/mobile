@@ -8,12 +8,14 @@ class IAddEntry {
   final int mediaId;
   final AniListUserListStatus status;
   int progress;
+  int progressVolumes;
   double score;
 
   IAddEntry({
     this.mediaId,
     this.status,
     this.progress,
+    this.progressVolumes,
     this.score,
   });
 

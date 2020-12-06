@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonKey(name: 'status')
 enum AniListUserListStatus {
   @JsonValue('COMPLETED')
   Completed,
