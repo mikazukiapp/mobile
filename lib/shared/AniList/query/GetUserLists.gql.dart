@@ -15,6 +15,8 @@ query getUserLists($userName: String!, $type: MediaType!, $status: [MediaListSta
           episodes
           type
           coverImage {
+            color
+            medium
             extraLarge
           }
           title {
