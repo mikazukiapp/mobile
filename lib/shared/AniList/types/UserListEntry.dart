@@ -29,6 +29,26 @@ class AniListUserListEntry {
     this.completedAt,
   });
 
+  String get progressText {
+    if (media?.episodes == null) {
+      return 'Episode $progress';
+    }
+
+    return 'Episode $progress / ${media.episodes}';
+  }
+
+  double get progressPercentage {
+    if (progress == 0) {
+      return 0;
+    }
+
+    if (media?.episodes == null) {
+      return 0.5;
+    }
+
+    return (progress / media.episodes).toDouble();
+  }
+
   factory AniListUserListEntry.fromJson(Map<String, dynamic> json) => _$AniListUserListEntryFromJson(json);
   Map<String, dynamic> toJson() => _$AniListUserListEntryToJson(this);
 }
