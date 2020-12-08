@@ -82,6 +82,8 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
     return Scaffold(
       appBar: MikazukiAppBar('Mikazuki'),
       bottomNavigationBar: BottomNavigationBar(
+        // TODO: Transform to AnimatedContainer
+        // @see: https://stackoverflow.com/questions/54414268/hide-bottom-navigation-bar-on-scroll-down-and-vice-versa/58766865#58766865
         selectedItemColor: appTheme.currentTheme() == ThemeMode.dark
             ? darkModeSelectionColors[_bottomNavBarIndex]
             : lightModeSelectionColors[_bottomNavBarIndex],
