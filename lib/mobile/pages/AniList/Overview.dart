@@ -60,6 +60,15 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
     5: Colors.black,
   };
 
+  Map<int, String> titles = {
+    0: getStringifiedAniListUserListStatus(AniListUserListStatus.Current),
+    1: getStringifiedAniListUserListStatus(AniListUserListStatus.Repeating),
+    2: getStringifiedAniListUserListStatus(AniListUserListStatus.Completed),
+    3: getStringifiedAniListUserListStatus(AniListUserListStatus.Paused),
+    4: getStringifiedAniListUserListStatus(AniListUserListStatus.Dropped),
+    5: getStringifiedAniListUserListStatus(AniListUserListStatus.Planning),
+  };
+
   void _onItemTapped(int index) {
     setState(() {
       _bottomNavBarIndex = index;
@@ -80,7 +89,7 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MikazukiAppBar('Mikazuki'),
+      appBar: MikazukiAppBar(title: 'Anime - ${titles[_bottomNavBarIndex]}'),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: appTheme.currentTheme() == ThemeMode.dark
             ? darkModeSelectionColors[_bottomNavBarIndex]
