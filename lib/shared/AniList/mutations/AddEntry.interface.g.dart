@@ -12,6 +12,7 @@ IAddEntry _$IAddEntryFromJson(Map<String, dynamic> json) {
     status:
         _$enumDecodeNullable(_$AniListUserListStatusEnumMap, json['status']),
     progress: json['progress'] as int,
+    progressVolumes: json['progressVolumes'] as int,
     score: (json['score'] as num)?.toDouble(),
   );
 }
@@ -28,6 +29,7 @@ Map<String, dynamic> _$IAddEntryToJson(IAddEntry instance) {
   writeNotNull('mediaId', instance.mediaId);
   writeNotNull('status', _$AniListUserListStatusEnumMap[instance.status]);
   writeNotNull('progress', instance.progress);
+  writeNotNull('progressVolumes', instance.progressVolumes);
   writeNotNull('score', instance.score);
   return val;
 }

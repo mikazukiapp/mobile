@@ -10,6 +10,7 @@ AniListUserListEntry _$AniListUserListEntryFromJson(Map<String, dynamic> json) {
   return AniListUserListEntry(
     id: json['id'] as int,
     progress: json['progress'] as int,
+    progressVolumes: json['progressVolumes'] as int,
     status:
         _$enumDecodeNullable(_$AniListUserListStatusEnumMap, json['status']),
     score: (json['score'] as num)?.toDouble(),
@@ -32,6 +33,7 @@ Map<String, dynamic> _$AniListUserListEntryToJson(
     <String, dynamic>{
       'id': instance.id,
       'progress': instance.progress,
+      'progressVolumes': instance.progressVolumes,
       'status': _$AniListUserListStatusEnumMap[instance.status],
       'score': instance.score,
       'updatedAt': instance.updatedAt,
