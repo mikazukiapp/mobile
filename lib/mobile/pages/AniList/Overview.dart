@@ -13,16 +13,27 @@ class AniListOverviewWidget extends StatefulWidget {
 class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   Future<List<AniListUserList>> userLists;
   int _bottomNavBarIndex = 0;
-  List<Widget> tabs = <Widget> [
-    AniListOverviewListWidget(key: Key('anilist_list_current'), status: AniListUserListStatus.Current),
-    AniListOverviewListWidget(key: Key('anilist_list_repeating'), status: AniListUserListStatus.Repeating),
-    AniListOverviewListWidget(key: Key('anilist_list_completed'), status: AniListUserListStatus.Completed),
-    AniListOverviewListWidget(key: Key('anilist_list_paused'), status: AniListUserListStatus.Paused),
-    AniListOverviewListWidget(key: Key('anilist_list_dropped'), status: AniListUserListStatus.Dropped),
-    AniListOverviewListWidget(key: Key('anilist_list_planning'), status: AniListUserListStatus.Planning),
+  List<Widget> tabs = <Widget>[
+    AniListOverviewListWidget(
+        key: Key('anilist_list_current'),
+        status: AniListUserListStatus.Current),
+    AniListOverviewListWidget(
+        key: Key('anilist_list_repeating'),
+        status: AniListUserListStatus.Repeating),
+    AniListOverviewListWidget(
+        key: Key('anilist_list_completed'),
+        status: AniListUserListStatus.Completed),
+    AniListOverviewListWidget(
+        key: Key('anilist_list_paused'), status: AniListUserListStatus.Paused),
+    AniListOverviewListWidget(
+        key: Key('anilist_list_dropped'),
+        status: AniListUserListStatus.Dropped),
+    AniListOverviewListWidget(
+        key: Key('anilist_list_planning'),
+        status: AniListUserListStatus.Planning),
   ];
 
-  List<BottomNavigationBarItem> _barItems = <BottomNavigationBarItem> [
+  List<BottomNavigationBarItem> _barItems = <BottomNavigationBarItem>[
     BottomNavigationBarItem(label: 'Current', icon: Icon(Icons.play_arrow)),
     BottomNavigationBarItem(label: 'Repeating', icon: Icon(Icons.repeat)),
     BottomNavigationBarItem(label: 'Completed', icon: Icon(Icons.check)),
@@ -71,7 +82,9 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
     return Scaffold(
       appBar: MikazukiAppBar('Mikazuki'),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: appTheme.currentTheme() == ThemeMode.dark ? darkModeSelectionColors[_bottomNavBarIndex] : lightModeSelectionColors[_bottomNavBarIndex],
+        selectedItemColor: appTheme.currentTheme() == ThemeMode.dark
+            ? darkModeSelectionColors[_bottomNavBarIndex]
+            : lightModeSelectionColors[_bottomNavBarIndex],
         items: _barItems,
         currentIndex: _bottomNavBarIndex,
         onTap: _onItemTapped,
