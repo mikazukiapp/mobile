@@ -17,13 +17,24 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
 
   _LoadingScreenWidget() {
     _secureStorage.read(key: 'anilist_token').then((token) async {
-      if (token != null && token.isNotEmpty) {
+      try {
         await _setAniListConfigurations(token);
+      } catch (exception) {
+        print(exception.toString());
+        _secureStorage.delete(key: 'anilist_token');
+        GraphQLConfiguration.removeToken();
+        token = null;
+      }
 
-        Navigator.of(context).pushAndRemoveUntil(NoAnimationMaterialPageRoute(builder: (context) => AniListOverviewWidget()), (route) => false);
+      if (token != null && token.isNotEmpty) {
+        Navigator.of(context).pushAndRemoveUntil(
+            NoAnimationMaterialPageRoute(
+                builder: (context) => AniListOverviewWidget()),
+            (route) => false);
       } else {
         Navigator.of(context).pushReplacement(
-          NoAnimationMaterialPageRoute(builder: (context) => LoginScreenWidget()),
+          NoAnimationMaterialPageRoute(
+              builder: (context) => LoginScreenWidget()),
         );
       }
     });
@@ -39,6 +50,10 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
   }
 
   Future<void> _setAniListConfigurations(String token) async {
+    if (token == null) {
+      throw 'No token given.';
+    }
+
     GraphQLConfiguration.setToken(token);
     AniListRepository.getInstance().isLoggedIn = true;
 
