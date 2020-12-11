@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mikazuki/mobile/widgets/util/ExColor.dart';
 import 'package:mikazuki/mobile/widgets/util/HexColor.dart';
 import 'package:mikazuki/shared/AniList/types/MediaStatus.dart';
 import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
@@ -8,10 +9,11 @@ import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
 class AniListOverviewListItem extends StatefulWidget {
   final AniListUserListEntry entry;
 
-  AniListOverviewListItem({ this.entry });
+  AniListOverviewListItem({this.entry});
 
   @override
-  _AniListOverviewListItemState createState() => _AniListOverviewListItemState();
+  _AniListOverviewListItemState createState() =>
+      _AniListOverviewListItemState();
 }
 
 class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
@@ -26,8 +28,10 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
   String get progressText => widget.entry.progressText;
   int get nextEpisode => widget.entry.media.nextAiringEpisode?.episode;
   double get nextEpisodeProgress => widget.entry.nextEpisodeProgressPercentage;
-  String get airingAtDifference => widget.entry.media.nextAiringEpisode?.airingAtDifference;
-  bool get isAiring => widget.entry.media.status == AniListMediaStatus.Releasing;
+  String get airingAtDifference =>
+      widget.entry.media.nextAiringEpisode?.airingAtDifference;
+  bool get isAiring =>
+      widget.entry.media.status == AniListMediaStatus.Releasing;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,8 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
                   fit: BoxFit.fitHeight,
                   cacheWidth: 64,
                   cacheHeight: 96,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) {
                       return child;
                     }
@@ -77,7 +82,12 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(flex: 2, child: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis, semanticsLabel: title)),
+                      Expanded(
+                          flex: 2,
+                          child: Text(title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              semanticsLabel: title)),
                       Container(
                         padding: EdgeInsets.only(left: 4.0),
                         child: Row(
@@ -116,11 +126,16 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
                         if (isAiring)
                           Flexible(
                             flex: 1,
-                            child: Icon(Icons.settings_input_antenna, size: 12.0, color: Colors.green,),
+                            child: Icon(
+                              Icons.settings_input_antenna,
+                              size: 12.0,
+                              color: Colors.green,
+                            ),
                           ),
                         if (nextEpisode != null)
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: isAiring ? 4.0 : 0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: isAiring ? 4.0 : 0),
                             child: Text(
                               'Episode $nextEpisode is airing in $airingAtDifference',
                               style: TextStyle(
@@ -141,24 +156,23 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(2.0),
                           child: LinearProgressIndicator(
-                            value: progressPercentage,
+                            value: nextEpisodeProgress,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              coverColor != null ? HexColor.fromHex(coverColor) : Colors.green[800],
-                            ),
-                            backgroundColor: coverColor != null ? HexColor.fromHex(coverColor).withOpacity(0.4) : Colors.green[800].withOpacity(0.4),
+                                Colors.green[200]),
+                            backgroundColor: Colors.transparent,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 2,
+                        height: 6,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(2.0), bottomRight: Radius.circular(2.0)),
+                          borderRadius: BorderRadius.circular(2.0),
                           child: LinearProgressIndicator(
-                            value: nextEpisodeProgress,
+                            value: progressPercentage,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              coverColor != null ? HexColor.fromHex(HexColor.calculateComplementaryColorFromHex(coverColor)) : Colors.orange[300]
-                            ),
-                            backgroundColor: Colors.transparent,
+                                ExColor.darken(Colors.green[500])),
+                            backgroundColor: ExColor.darken(
+                                Colors.green[500].withOpacity(0.4)),
                           ),
                         ),
                       ),

@@ -63,6 +63,7 @@ flutter:
     - assets/images/AppIcon.png
     - assets/images/login_background.jpg
     - assets/images/appLogos/Mikazuki_2_White_Asset.svg
+    - assets/images/appLogos/Mikazuki_Asset.svg
     - .env
 
   fonts:
