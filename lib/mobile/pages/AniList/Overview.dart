@@ -14,6 +14,7 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   PageController _controller;
   Future<List<AniListUserList>> userLists;
   int _bottomNavBarIndex = 0;
+  bool _inBottomNavBarAnimation = false;
   List<Widget> tabs = <Widget>[
     AniListOverviewListWidget(
         key: Key('anilist_list_current'),
@@ -73,8 +74,11 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _bottomNavBarIndex = index;
-      _controller.animateToPage(index,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      _inBottomNavBarAnimation = true;
+      _controller
+          .animateToPage(index,
+              duration: Duration(milliseconds: 200), curve: Curves.easeInOut)
+          .whenComplete(() => (_inBottomNavBarAnimation = false));
     });
   }
 
@@ -112,7 +116,9 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
       body: PageView(
         controller: _controller,
         onPageChanged: (index) {
-          setState(() => _bottomNavBarIndex = index);
+          if (!_inBottomNavBarAnimation) {
+            setState(() => _bottomNavBarIndex = index);
+          }
         },
         children: tabs,
       ),
