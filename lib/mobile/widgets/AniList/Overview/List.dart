@@ -38,14 +38,21 @@ class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget>
         }
 
         if (snapshot.hasData) {
-          return ListView.builder(
-            itemExtent: 100.0,
-            padding: EdgeInsets.only(left: 12.0, right: 12.0),
-            itemCount: snapshot.data.entries.length,
-            itemBuilder: (context, index) {
-              return AniListOverviewListItem(
-                  entry: snapshot.data.entries[index]);
+          AniListUserList list = snapshot.data;
+          return RefreshIndicator(
+            onRefresh: () async {
+              list = await AniListRepository.getInstance().getUserListByStatus(widget.status);
             },
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemExtent: 100.0,
+              itemCount: list.entries.length,
+              itemBuilder: (context, index) {
+                return AniListOverviewListItem(
+                  entry: list.entries[index],
+                );
+              },
+            ),
           );
         }
 

@@ -3,6 +3,7 @@ import 'package:mikazuki/mobile/widgets/AniList/Overview/ListItemElements/ListIt
 import 'package:mikazuki/mobile/widgets/AniList/Overview/ListItemElements/ListItemHero.dart';
 import 'package:mikazuki/shared/AniList/types/MediaStatus.dart';
 import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class AniListOverviewListItem extends StatefulWidget {
   final AniListUserListEntry entry;
@@ -33,27 +34,57 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(bottom: 4.0, top: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListItemHero(entryId: entryId, coverImage: coverImage),
-          ListItemContent(
-            title: title,
-            score: score,
-            progressText: progressText,
-            isAiring: isAiring,
-            nextEpisode: nextEpisode,
-            airingAtDifference: airingAtDifference,
-            nextEpisodeProgress: nextEpisodeProgress,
-            progressPercentage: progressPercentage,
-          ),
-        ],
+    return Slidable(
+      key: ValueKey(entryId),
+      actionPane: SlidableScrollActionPane(),
+      actionExtentRatio: 0.25,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListItemHero(entryId: entryId, coverImage: coverImage),
+            ListItemContent(
+              title: title,
+              score: score,
+              progressText: progressText,
+              isAiring: isAiring,
+              nextEpisode: nextEpisode,
+              airingAtDifference: airingAtDifference,
+              nextEpisodeProgress: nextEpisodeProgress,
+              progressPercentage: progressPercentage,
+            ),
+          ],
+        ),
       ),
+      dismissal: SlidableDismissal(
+        closeOnCanceled: true,
+        dismissThresholds: <SlideActionType, double> {
+          SlideActionType.primary: 0.5,
+          SlideActionType.secondary: 1.0,
+        },
+        child: SlidableDrawerDismissal(),
+        onWillDismiss: (SlideActionType type) async {
+          // Add actions here
+          return false;
+        },
+      ),
+      actions: <Widget>[
+        IconSlideAction(
+          icon: Icons.plus_one,
+          color: Colors.green[700],
+          onTap: () {
+            print('tapped');
+          },
+        ),
+      ],
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          icon: Icons.more_horiz,
+          color: Theme.of(context).primaryColor,
+        )
+      ],
     );
   }
 }
-
-
