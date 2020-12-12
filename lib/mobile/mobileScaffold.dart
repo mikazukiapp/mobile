@@ -31,7 +31,7 @@ class _MikazukiScaffoldState extends State<MikazukiScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MikazukiAppBar('Mikazuki'),
+      appBar: MikazukiAppBar(title: 'Mikazuki'),
       // bottomNavigationBar: MikazukiBottomNavBar(),
       body: _body,
     );

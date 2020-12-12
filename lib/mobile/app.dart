@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mikazuki/mobile/config.dart';
+import 'package:mikazuki/mobile/pages/AniList/Overview.dart';
 import 'package:mikazuki/mobile/pages/loadingScreen.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/pages/search.dart';
@@ -30,6 +31,7 @@ class _MobileAppState extends State<MobileApp> {
         '/': (BuildContext context) => LoadingScreenWidget(),
         '/login': (BuildContext context) => LoginScreenWidget(),
         '/search': (BuildContext context) => SearchScreenWidget(),
+        '/overview': (BuildContext context) => AniListOverviewWidget(),
       },
       themeMode: appTheme.currentTheme(),
       darkTheme:

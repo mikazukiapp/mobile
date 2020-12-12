@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mikazuki/mobile/pages/AniList/Overview.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
-import 'package:mikazuki/mobile/pages/search.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
@@ -17,13 +17,24 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
 
   _LoadingScreenWidget() {
     _secureStorage.read(key: 'anilist_token').then((token) async {
-      if (token != null && token.isNotEmpty) {
-        _setAniListConfigurations(token);
+      try {
+        await _setAniListConfigurations(token);
+      } catch (exception) {
+        print(exception.toString());
+        _secureStorage.delete(key: 'anilist_token');
+        GraphQLConfiguration.removeToken();
+        token = null;
+      }
 
-        Navigator.of(context).pushAndRemoveUntil(NoAnimationMaterialPageRoute(builder: (context) => SearchScreenWidget()), (route) => false);
+      if (token != null && token.isNotEmpty) {
+        Navigator.of(context).pushAndRemoveUntil(
+            NoAnimationMaterialPageRoute(
+                builder: (context) => AniListOverviewWidget()),
+            (route) => false);
       } else {
         Navigator.of(context).pushReplacement(
-          NoAnimationMaterialPageRoute(builder: (context) => LoginScreenWidget()),
+          NoAnimationMaterialPageRoute(
+              builder: (context) => LoginScreenWidget()),
         );
       }
     });
@@ -38,12 +49,15 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
     );
   }
 
-  void _setAniListConfigurations(String token) {
+  Future<void> _setAniListConfigurations(String token) async {
+    if (token == null) {
+      throw 'No token given.';
+    }
+
     GraphQLConfiguration.setToken(token);
     AniListRepository.getInstance().isLoggedIn = true;
 
-    AniListRepository.getInstance().getUserData().then((AniListUser user) {
-      AniListRepository.getInstance().username = user.name;
-    });
+    AniListUser user = await AniListRepository.getInstance().getUserData();
+    AniListRepository.getInstance().username = user.name;
   }
 }

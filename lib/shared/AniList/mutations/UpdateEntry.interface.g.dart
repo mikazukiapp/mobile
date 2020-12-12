@@ -10,6 +10,7 @@ IUpdateEntry _$IUpdateEntryFromJson(Map<String, dynamic> json) {
   return IUpdateEntry(
     entryId: json['entryId'] as int,
     progress: json['progress'] as int,
+    progressVolumes: json['progressVolumes'] as int,
     score: (json['score'] as num)?.toDouble(),
     status:
         _$enumDecodeNullable(_$AniListUserListStatusEnumMap, json['status']),
@@ -34,6 +35,7 @@ Map<String, dynamic> _$IUpdateEntryToJson(IUpdateEntry instance) {
 
   writeNotNull('entryId', instance.entryId);
   writeNotNull('progress', instance.progress);
+  writeNotNull('progressVolumes', instance.progressVolumes);
   writeNotNull('score', instance.score);
   writeNotNull('status', _$AniListUserListStatusEnumMap[instance.status]);
   writeNotNull('startedAt', instance.startedAt);
