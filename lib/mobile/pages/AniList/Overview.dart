@@ -10,8 +10,7 @@ class AniListOverviewWidget extends StatefulWidget {
   _AniListOverviewWidgetState createState() => _AniListOverviewWidgetState();
 }
 
-class _AniListOverviewWidgetState extends State<AniListOverviewWidget>
-    with TickerProviderStateMixin {
+class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   PageController _controller;
   Future<List<AniListUserList>> userLists;
   int _bottomNavBarIndex = 0;
@@ -75,7 +74,7 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget>
     setState(() {
       _bottomNavBarIndex = index;
       _controller.animateToPage(index,
-          duration: Duration(milliseconds: 100), curve: Curves.bounceInOut);
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
     });
   }
 
