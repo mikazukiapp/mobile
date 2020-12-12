@@ -7,13 +7,15 @@ import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 class AniListOverviewListWidget extends StatefulWidget {
   final AniListUserListStatus status;
 
-  AniListOverviewListWidget({ @required Key key, @required this.status });
+  AniListOverviewListWidget({@required Key key, @required this.status});
 
   @override
-  _AniListOverviewListWidgetState createState() => _AniListOverviewListWidgetState();
+  _AniListOverviewListWidgetState createState() =>
+      _AniListOverviewListWidgetState();
 }
 
-class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget> {
+class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget>
+    with AutomaticKeepAliveClientMixin<AniListOverviewListWidget> {
   Future<AniListUserList> _list;
 
   @override
@@ -24,6 +26,8 @@ class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return FutureBuilder(
       future: _list,
       builder: (context, AsyncSnapshot<AniListUserList> snapshot) {
@@ -39,7 +43,8 @@ class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget> {
             padding: EdgeInsets.only(left: 12.0, right: 12.0),
             itemCount: snapshot.data.entries.length,
             itemBuilder: (context, index) {
-              return AniListOverviewListItem(entry: snapshot.data.entries[index]);
+              return AniListOverviewListItem(
+                  entry: snapshot.data.entries[index]);
             },
           );
         }
@@ -50,4 +55,7 @@ class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

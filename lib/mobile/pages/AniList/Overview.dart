@@ -10,7 +10,9 @@ class AniListOverviewWidget extends StatefulWidget {
   _AniListOverviewWidgetState createState() => _AniListOverviewWidgetState();
 }
 
-class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
+class _AniListOverviewWidgetState extends State<AniListOverviewWidget>
+    with TickerProviderStateMixin {
+  PageController _controller;
   Future<List<AniListUserList>> userLists;
   int _bottomNavBarIndex = 0;
   List<Widget> tabs = <Widget>[
@@ -72,18 +74,27 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _bottomNavBarIndex = index;
+      _controller.animateToPage(index,
+          duration: Duration(milliseconds: 100), curve: Curves.bounceInOut);
     });
   }
 
   @override
   void initState() {
     super.initState();
+    _controller = PageController();
 
     appTheme.addListener(() {
       if (mounted) {
         setState(() {});
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -99,8 +110,11 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
         onTap: _onItemTapped,
         unselectedItemColor: Theme.of(context).iconTheme.color,
       ),
-      body: IndexedStack(
-        index: _bottomNavBarIndex,
+      body: PageView(
+        controller: _controller,
+        onPageChanged: (index) {
+          setState(() => _bottomNavBarIndex = index);
+        },
         children: tabs,
       ),
     );
