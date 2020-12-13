@@ -14,6 +14,16 @@ class AniListDateInput {
     this.day,
   });
 
+  factory AniListDateInput.fromNow() {
+    DateTime now = DateTime.now();
+
+    return AniListDateInput(
+      day: now.day,
+      month: now.month,
+      year: now.year,
+    );
+  }
+
   factory AniListDateInput.fromJson(Map<String, dynamic> json) => _$AniListDateInputFromJson(json);
   Map<String, dynamic> toJson() => _$AniListDateInputToJson(this);
 }
