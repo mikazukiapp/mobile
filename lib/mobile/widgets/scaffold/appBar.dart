@@ -28,32 +28,31 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
       leading: Container(
         padding: EdgeInsets.all(8.0),
         child: SvgPicture.asset(
-          // kMikazukiSvgLogo,
-          'assets/images/appLogos/Mikazuki_Asset.svg',
-          color: Theme.of(context).iconTheme.color,
+          kMikazukiSvgLogo,
+          // color: Theme.of(context).iconTheme.color,
         ),
       ),
       title: widget.title != null ? Text(widget.title) : null,
-      // actions: <Widget>[
-      //   IconButton(
-      //       icon: Icon(AniListRepository.getInstance().isLoggedIn
-      //           ? Icons.logout
-      //           : Icons.login),
-      //       onPressed: () {
-      //         if (AniListRepository.getInstance().isLoggedIn) {
-      //           print('Logging out...');
-      //           AniListRepository.getInstance().isLoggedIn = false;
-      //           GraphQLConfiguration.removeToken();
-      //           SecureStorageActions.delete('anilist_token');
-      //           Navigator.pushAndRemoveUntil(
-      //               context,
-      //               NoAnimationMaterialPageRoute(
-      //                   builder: (BuildContext context) => LoginScreenWidget()),
-      //               (route) => false);
-      //         } else {
-      //           Navigator.pushNamed(context, '/login');
-      //         }
-      //       }),
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(AniListRepository.getInstance().isLoggedIn
+                ? Icons.logout
+                : Icons.login),
+            onPressed: () {
+              if (AniListRepository.getInstance().isLoggedIn) {
+                print('Logging out...');
+                AniListRepository.getInstance().isLoggedIn = false;
+                GraphQLConfiguration.removeToken();
+                SecureStorageActions.delete('anilist_token');
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    NoAnimationMaterialPageRoute(
+                        builder: (BuildContext context) => LoginScreenWidget()),
+                    (route) => false);
+              } else {
+                Navigator.pushNamed(context, '/login');
+              }
+            }),
       //   IconButton(
       //       icon: appTheme.currentTheme() == ThemeMode.light
       //           ? Icon(Icons.lightbulb, color: Colors.yellow)
@@ -63,7 +62,7 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
       //           appTheme.switchTheme();
       //         });
       //       })
-      // ],
+      ],
     );
   }
 }
