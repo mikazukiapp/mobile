@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mikazuki/mobile/widgets/AniList/Overview/CompleteDialog.dart';
 import 'package:mikazuki/mobile/widgets/AniList/Overview/ListItemElements/ListItemContent.dart';
 import 'package:mikazuki/mobile/widgets/AniList/Overview/ListItemElements/ListItemHero.dart';
-import 'package:mikazuki/shared/AniList/AniListRepository.dart';
+import 'package:mikazuki/mobile/widgets/AniList/Overview/ListItemMenu.dart';
 import 'package:mikazuki/shared/AniList/types/DateInput.dart';
 import 'package:mikazuki/shared/AniList/types/MediaStatus.dart';
 import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
@@ -11,18 +11,11 @@ import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 
 class AniListOverviewListItem extends StatefulWidget {
   final AniListUserListEntry entry;
-  final int listItemIndex;
-  final void Function(int index) removeElement;
-  final Future<void> Function() refreshList;
-  final void Function(int index,
-      {int progress, double score, AniListUserListStatus status}) updateEntry;
+  final int index;
+  final void Function(int index) removeEntry;
 
   AniListOverviewListItem(
-      {@required this.entry,
-      @required this.listItemIndex,
-      @required this.removeElement,
-      @required this.refreshList,
-      @required this.updateEntry});
+      {@required this.entry, @required this.index, @required this.removeEntry});
 
   @override
   _AniListOverviewListItemState createState() =>
@@ -32,9 +25,9 @@ class AniListOverviewListItem extends StatefulWidget {
 class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
   int get entryId => widget.entry.id;
   int get progress => widget.entry.progress;
+  double get score => widget.entry.score;
   int get episodes => widget.entry.media.episodes;
   int get nextEpisode => widget.entry.media.nextAiringEpisode?.episode;
-  double get score => widget.entry.score;
   double get progressPercentage => widget.entry.progressPercentage;
   double get nextEpisodeProgress => widget.entry.nextEpisodeProgressPercentage;
   String get title => widget.entry.media.title.romaji;
@@ -46,24 +39,57 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
   bool get isAiring =>
       widget.entry.media.status == AniListMediaStatus.Releasing;
   bool get isNextEpisodeFinal => widget.entry.isNextEpisodeFinal;
+  bool isCompleted = false;
 
   SlidableController _controller = SlidableController();
 
   bool _isLoading = false;
   double temporaryScoreValue = 0;
 
+  void increaseProgress({int steps = 1}) {
+    _setProgress(progress + steps);
+  }
+
+  void decreaseProgress({int steps = 1}) {
+    _setProgress(progress - steps);
+  }
+
+  void _setProgress(int value) {
+    setState(() {
+      widget.entry.progress = value;
+      widget.entry.save();
+    });
+  }
+
+  void setCompleted() {
+    setState(() {
+      isCompleted = true;
+      widget.entry.progress = episodes;
+      widget.entry.score = temporaryScoreValue ?? score;
+      widget.entry.status = AniListUserListStatus.Completed;
+      widget.entry.completedAt = AniListDateInput.fromNow();
+      widget.entry.save(
+        includeProgress: true,
+        includeScore: true,
+        includeStatus: true,
+        includeCompletedAt: true,
+      );
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     temporaryScoreValue = score ?? 0;
+    isCompleted = widget.entry.status == AniListUserListStatus.Completed;
   }
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      key: ValueKey(entryId),
+      key: UniqueKey(),
       actionPane: SlidableScrollActionPane(),
-      actionExtentRatio: 0.25,
+      actionExtentRatio: 0.2,
       controller: _controller,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
@@ -73,6 +99,7 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
           children: [
             ListItemHero(entryId: entryId, coverImage: coverImage),
             ListItemContent(
+              isLoading: _isLoading,
               title: title,
               score: score,
               progressText: progressText,
@@ -104,64 +131,67 @@ class _AniListOverviewListItemState extends State<AniListOverviewListItem> {
               ),
             );
 
-            setState(() {
-              _isLoading = true;
-              AniListRepository.getInstance()
-                  .updateEntry(entryId,
-                      progress: episodes,
-                      score: temporaryScoreValue ?? score,
-                      status: AniListUserListStatus.Completed,
-                      completedAt: AniListDateInput.fromNow())
-                  .then((entry) => widget.updateEntry(widget.listItemIndex,
-                      progress: entry.progress,
-                      score: entry.score,
-                      status: entry.status))
-                  .whenComplete(() => setState(() => _isLoading = false));
-            });
-          } else {
-            setState(() {
-              _isLoading = true;
-              AniListRepository.getInstance()
-                  .updateEntry(entryId, progress: progress + 1)
-                  .then((entry) => widget.updateEntry(widget.listItemIndex,
-                      progress: entry.progress))
-                  .whenComplete(() => setState(() => _isLoading = false));
-            });
+            return true;
           }
 
-          return isNextEpisodeFinal;
+          increaseProgress();
+          return false;
         },
         onDismissed: (SlideActionType type) {
-          widget.removeElement(widget.listItemIndex);
+          setCompleted();
+          widget.removeEntry(widget.index);
+          return;
         },
       ),
       actions: <Widget>[
-        IconSlideAction(
-          icon: !isNextEpisodeFinal ? Icons.plus_one : Icons.check,
-          color: Colors.green[700],
-          onTap: () {
-            if (isNextEpisodeFinal) {
-              _controller.activeState.dismiss();
-              return;
-            }
+        if (!isCompleted)
+          IconSlideAction(
+            icon: !isNextEpisodeFinal
+                ? Icons.plus_one
+                : Icons.check,
+            color: Colors.green[700],
+            onTap: () {
+              if (isCompleted) {
+                return;
+              }
 
-            setState(() {
-              _isLoading = true;
-              AniListRepository.getInstance()
-                  .updateEntry(entryId, progress: progress + 1)
-                  .then((entry) => widget.updateEntry(widget.listItemIndex,
-                      progress: entry.progress))
-                  .whenComplete(() => setState(() => _isLoading = false));
-            });
-          },
-        ),
+              if (isNextEpisodeFinal) {
+                _controller.activeState.dismiss();
+                return;
+              }
+
+              increaseProgress();
+            },
+          ),
       ],
       secondaryActions: <Widget>[
+        if (progress > 0 && !isCompleted)
+          IconSlideAction(
+            icon: Icons.exposure_minus_1,
+            color: Colors.red,
+            onTap: () {
+              if (progress == 0) {
+                return;
+              }
+
+              decreaseProgress();
+            },
+          ),
+        IconSlideAction(
+          iconWidget: Icon(Icons.star, color: Colors.white,),
+          color: Colors.yellow[800],
+          onTap: () {
+            print('stars go brrrrrr');
+          },
+        ),
         IconSlideAction(
           icon: Icons.more_horiz,
           color: Theme.of(context).primaryColor,
           onTap: () {
-            // TODO: Add menu for extra functions here
+            showDialog<void>(
+              context: context,
+              builder: (context) => AniListOverviewListItemMenuWidget(),
+            );
           },
         )
       ],

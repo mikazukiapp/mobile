@@ -6,10 +6,12 @@ class ListItemProgress extends StatelessWidget {
     Key key,
     @required this.nextEpisodeProgress,
     @required this.progressPercentage,
+    @required this.isLoading,
   }) : super(key: key);
 
   final double nextEpisodeProgress;
   final double progressPercentage;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -17,24 +19,25 @@ class ListItemProgress extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       overflow: Overflow.visible,
       children: <Widget>[
-        SizedBox(
-          height: 6,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(2.0),
-            child: LinearProgressIndicator(
-              value: nextEpisodeProgress,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.green[200]),
-              backgroundColor: Colors.transparent,
+        if (!isLoading)
+          SizedBox(
+            height: 6,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(2.0),
+              child: LinearProgressIndicator(
+                value: nextEpisodeProgress,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.green[200]),
+                backgroundColor: Colors.transparent,
+              ),
             ),
           ),
-        ),
         SizedBox(
           height: 6,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(2.0),
             child: LinearProgressIndicator(
-              value: progressPercentage,
+              value: !isLoading ? progressPercentage : null,
               valueColor: AlwaysStoppedAnimation<Color>(
                   ExColor.darken(Colors.green[500])),
               backgroundColor: ExColor.darken(
