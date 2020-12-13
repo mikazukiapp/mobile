@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/shared/AniList/types/DateInput.dart';
 import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
@@ -8,14 +9,14 @@ part 'UserListEntry.g.dart';
 @JsonSerializable()
 class AniListUserListEntry {
   final int id;
-  final int progress;
-  final int progressVolumes;
-  final AniListUserListStatus status;
-  final double score;
+  int progress;
+  int progressVolumes;
+  AniListUserListStatus status;
+  double score;
   final int updatedAt; // Timestamp
   final AniListMedia media;
-  final AniListDateInput startedAt;
-  final AniListDateInput completedAt;
+  AniListDateInput startedAt;
+  AniListDateInput completedAt;
 
   AniListUserListEntry({
     this.id,
@@ -28,15 +29,6 @@ class AniListUserListEntry {
     this.startedAt,
     this.completedAt,
   });
-
-  // TODO: Fix stack overflow error
-  set progress(int value) {
-    progress = value;
-  }
-
-  set score(double value) {
-    score = value;
-  }
 
   bool get isNextEpisodeFinal {
     if (media?.episodes == null) {
@@ -90,6 +82,26 @@ class AniListUserListEntry {
     return (episodesUntilNow / media.episodes).toDouble();
   }
 
-  factory AniListUserListEntry.fromJson(Map<String, dynamic> json) => _$AniListUserListEntryFromJson(json);
+  Future<AniListUserListEntry> save({
+    bool includeProgress = true,
+    bool includeStatus = false,
+    bool includeScore = false,
+    bool includeStartedAt = false,
+    bool includeCompletedAt = false,
+    bool includeProgressVolumes = false,
+  }) {
+    return AniListRepository.getInstance().updateEntry(
+      id,
+      progress: includeProgress ? progress : null,
+      progressVolumes: includeProgressVolumes ? progressVolumes : null,
+      status: includeStatus ? status : null,
+      score: includeScore ? score : null,
+      startedAt: includeStartedAt ? startedAt : null,
+      completedAt: includeCompletedAt ? completedAt : null,
+    );
+  }
+
+  factory AniListUserListEntry.fromJson(Map<String, dynamic> json) =>
+      _$AniListUserListEntryFromJson(json);
   Map<String, dynamic> toJson() => _$AniListUserListEntryToJson(this);
 }
