@@ -28,8 +28,8 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
       leading: Container(
         padding: EdgeInsets.all(8.0),
         child: SvgPicture.asset(
-          kMikazukiSvgLogo,
-          // 'assets/images/appLogos/Mikazuki_Asset.svg',
+          // kMikazukiSvgLogo,
+          'assets/images/appLogos/Mikazuki_Asset.svg',
           color: Theme.of(context).iconTheme.color,
         ),
       ),
