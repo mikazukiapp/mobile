@@ -29,6 +29,23 @@ class AniListUserListEntry {
     this.completedAt,
   });
 
+  // TODO: Fix stack overflow error
+  set progress(int value) {
+    progress = value;
+  }
+
+  set score(double value) {
+    score = value;
+  }
+
+  bool get isNextEpisodeFinal {
+    if (media?.episodes == null) {
+      return false;
+    }
+
+    return progress + 1 == media.episodes;
+  }
+
   String get progressText {
     if (media?.episodes == null) {
       return '$progress / ?';
