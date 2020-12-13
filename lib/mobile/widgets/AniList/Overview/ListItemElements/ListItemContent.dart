@@ -16,6 +16,7 @@ class ListItemContent extends StatelessWidget {
     @required this.airingAtDifference,
     @required this.nextEpisodeProgress,
     @required this.progressPercentage,
+    @required this.isLoading,
   }) : super(key: key);
 
   final String title;
@@ -26,6 +27,7 @@ class ListItemContent extends StatelessWidget {
   final String airingAtDifference;
   final double nextEpisodeProgress;
   final double progressPercentage;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +52,10 @@ class ListItemContent extends StatelessWidget {
                 nextEpisode: nextEpisode,
                 airingAtDifference: airingAtDifference),
             ListItemProgress(
-                nextEpisodeProgress: nextEpisodeProgress,
-                progressPercentage: progressPercentage),
+              isLoading: isLoading,
+              nextEpisodeProgress: nextEpisodeProgress,
+              progressPercentage: progressPercentage,
+            ),
           ],
         ),
       ),

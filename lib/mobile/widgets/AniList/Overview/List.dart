@@ -16,43 +16,79 @@ class AniListOverviewListWidget extends StatefulWidget {
 
 class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget>
     with AutomaticKeepAliveClientMixin<AniListOverviewListWidget> {
-  Future<AniListUserList> _list;
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  AniListUserList _userList;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _list = AniListRepository.getInstance().getUserListByStatus(widget.status);
+
+    _isLoading = true;
+    AniListRepository.getInstance()
+        .getUserListByStatus(widget.status)
+        .then((value) {
+      setState(() {
+        _userList = value;
+      });
+    }).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
+
+  void removeEntry(int index) {
+    setState(() {
+      _userList.entries.removeAt(index);
+      listKey.currentState.removeItem(
+        index,
+        // Due to Slidable dismissing the item itself
+        // and AnimatedList continuing the animation,
+        // to remove the item from the current state
+        // as animation replacement, an empty container
+        // that has no height, will be used so no disturbing
+        // factor is showing.
+        (context, animation) => Container(height: 0),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return FutureBuilder(
-      future: _list,
-      builder: (context, AsyncSnapshot<AniListUserList> snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        }
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemExtent: 100.0,
-            padding: EdgeInsets.only(left: 12.0, right: 12.0),
-            itemCount: snapshot.data.entries.length,
-            itemBuilder: (context, index) {
-              return AniListOverviewListItem(
-                  entry: snapshot.data.entries[index]);
-            },
-          );
-        }
-
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _isLoading = true;
+          AniListRepository.getInstance()
+              .getUserListByStatus(widget.status)
+              .then((value) {
+            setState(() {
+              _userList = value;
+            });
+          }).whenComplete(() => _isLoading = false);
+        });
       },
+      child: AnimatedList(
+        key: listKey,
+        physics: const AlwaysScrollableScrollPhysics(),
+        initialItemCount: _userList.entries.length,
+        itemBuilder: (context, index, animation) {
+          return AniListOverviewListItem(
+            entry: _userList.entries[index],
+            removeEntry: removeEntry,
+            index: index,
+          );
+        },
+      ),
     );
   }
 
