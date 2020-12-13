@@ -20,13 +20,13 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
         key: Key('anilist_list_current'),
         status: AniListUserListStatus.Current),
     AniListOverviewListWidget(
-        key: Key('anilist_list_repeating'),
-        status: AniListUserListStatus.Repeating),
+        key: Key('anilist_list_paused'), status: AniListUserListStatus.Paused),
     AniListOverviewListWidget(
         key: Key('anilist_list_completed'),
         status: AniListUserListStatus.Completed),
     AniListOverviewListWidget(
-        key: Key('anilist_list_paused'), status: AniListUserListStatus.Paused),
+        key: Key('anilist_list_repeating'),
+        status: AniListUserListStatus.Repeating),
     AniListOverviewListWidget(
         key: Key('anilist_list_dropped'),
         status: AniListUserListStatus.Dropped),
@@ -37,38 +37,29 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
 
   List<BottomNavigationBarItem> _barItems = <BottomNavigationBarItem>[
     BottomNavigationBarItem(label: 'Current', icon: Icon(Icons.play_arrow)),
-    BottomNavigationBarItem(label: 'Repeating', icon: Icon(Icons.repeat)),
-    BottomNavigationBarItem(label: 'Completed', icon: Icon(Icons.check)),
     BottomNavigationBarItem(label: 'Paused', icon: Icon(Icons.pause)),
+    BottomNavigationBarItem(label: 'Completed', icon: Icon(Icons.check)),
+    BottomNavigationBarItem(label: 'Repeating', icon: Icon(Icons.repeat)),
     BottomNavigationBarItem(label: 'Dropped', icon: Icon(Icons.stop)),
     BottomNavigationBarItem(label: 'Planning', icon: Icon(Icons.access_time)),
   ];
 
   Map<int, Color> darkModeSelectionColors = {
     0: Colors.green[500],
-    1: Colors.green[100],
+    1: Colors.yellow[300],
     2: Colors.blue[200],
-    3: Colors.yellow[300],
+    3: Colors.green[100],
     4: Colors.red[500],
     5: Colors.white,
   };
 
   Map<int, Color> lightModeSelectionColors = {
     0: Colors.green[500],
-    1: Colors.green[900],
+    1: Colors.yellow[900],
     2: Colors.blue[900],
-    3: Colors.yellow[900],
+    3: Colors.green[900],
     4: Colors.red[900],
     5: Colors.black,
-  };
-
-  Map<int, String> titles = {
-    0: getStringifiedAniListUserListStatus(AniListUserListStatus.Current),
-    1: getStringifiedAniListUserListStatus(AniListUserListStatus.Repeating),
-    2: getStringifiedAniListUserListStatus(AniListUserListStatus.Completed),
-    3: getStringifiedAniListUserListStatus(AniListUserListStatus.Paused),
-    4: getStringifiedAniListUserListStatus(AniListUserListStatus.Dropped),
-    5: getStringifiedAniListUserListStatus(AniListUserListStatus.Planning),
   };
 
   void _onItemTapped(int index) {
@@ -103,7 +94,7 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MikazukiAppBar(title: 'Anime - ${titles[_bottomNavBarIndex]}'),
+      appBar: MikazukiAppBar(title: 'Anime'),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: appTheme.currentTheme() == ThemeMode.dark
             ? darkModeSelectionColors[_bottomNavBarIndex]
