@@ -6,4 +6,4 @@ const MaterialColor kPrimarySwatch = Colors.teal;
 const Color kLightModePrimaryColor = Color(0xFF000000);
 const Color kDarkModePrimaryColor = Color(0xFFFFFFFF);
 
-const String kMikazukiSvgLogo = 'assets/images/appLogos/Mikazuki_2_White_Asset.svg';
+const String kMikazukiSvgLogo = 'assets/images/appLogos/Mikazuki.svg';
