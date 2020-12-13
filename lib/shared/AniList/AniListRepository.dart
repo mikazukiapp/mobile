@@ -180,6 +180,7 @@ class AniListRepository with ChangeNotifier {
 
   Future<AniListUserListEntry> updateEntry(int entryId,
       {int progress,
+      int progressVolumes,
       double score,
       AniListUserListStatus status,
       AniListDateInput startedAt,
@@ -187,6 +188,7 @@ class AniListRepository with ChangeNotifier {
     Map<String, dynamic> variables = IUpdateEntry(
             entryId: entryId,
             progress: progress,
+            progressVolumes: progressVolumes,
             score: score,
             status: status,
             startedAt: startedAt,
