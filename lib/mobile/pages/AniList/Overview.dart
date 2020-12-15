@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mikazuki/mobile/config.dart';
 import 'package:mikazuki/mobile/widgets/AniList/Overview/List.dart';
 import 'package:mikazuki/mobile/widgets/scaffold/appBar.dart';
+import 'package:mikazuki/mobile/widgets/scaffold/drawer.dart';
 import 'package:mikazuki/shared/AniList/types/UserList.dart';
 import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
 
@@ -95,6 +96,7 @@ class _AniListOverviewWidgetState extends State<AniListOverviewWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MikazukiAppBar(title: 'Anime'),
+      drawer: MikazukiDrawer(),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: appTheme.currentTheme() == ThemeMode.dark
             ? darkModeSelectionColors[_bottomNavBarIndex]

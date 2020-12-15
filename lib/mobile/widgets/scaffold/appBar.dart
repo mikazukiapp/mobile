@@ -25,13 +25,9 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      leading: Container(
-        padding: EdgeInsets.all(8.0),
-        child: SvgPicture.asset(
-          kMikazukiSvgLogo,
-          // color: Theme.of(context).iconTheme.color,
-        ),
-      ),
+      leading: IconButton(icon: SvgPicture.asset(kMikazukiSvgLogo), onPressed: () {
+        Scaffold.of(context).openDrawer();
+      }),
       title: widget.title != null ? Text(widget.title) : null,
       actions: <Widget>[
         IconButton(
