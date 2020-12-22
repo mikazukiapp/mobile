@@ -2,11 +2,16 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mikazuki/desktop/app.dart';
 import 'package:mikazuki/mobile/app.dart';
+import 'package:mikazuki/shared/AniList/types/UserAvatar.dart';
 
 Future main() async {
   await DotEnv().load('.env');
+  await Hive.initFlutter();
+  Hive.registerAdapter(AniListUserAvatarAdapter());
 
   runApp(MikazukiApp());
 }

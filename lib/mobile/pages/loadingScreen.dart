@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:mikazuki/mobile/pages/AniList/Overview.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
@@ -56,6 +57,7 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
 
     GraphQLConfiguration.setToken(token);
     AniListRepository.getInstance().isLoggedIn = true;
+    await Hive.openBox('anilist_userdata');
 
     AniListUser user = await AniListRepository.getInstance().getUserData();
     AniListRepository.getInstance().username = user.name;

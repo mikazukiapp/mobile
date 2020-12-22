@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
+import 'package:hive/hive.dart';
 import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
 import 'package:mikazuki/shared/AniList/mutations/AddEntry.gql.dart';
 import 'package:mikazuki/shared/AniList/mutations/AddEntry.interface.dart';
@@ -70,7 +71,14 @@ class AniListRepository with ChangeNotifier {
       return null;
     }
 
-    return AniListUser.fromJson(result.data['user']);
+    AniListUser user = AniListUser.fromJson(result.data['user']);
+
+    Box<dynamic> box = Hive.box('anilist_userdata');
+    await box.clear();
+    await box.put('avatars', user.avatar);
+    await box.put('bannerImage', user.bannerImage);
+
+    return user;
   }
 
   Future<List<SearchResult>> searchAnime(String query) async {
@@ -102,7 +110,8 @@ class AniListRepository with ChangeNotifier {
     return results;
   }
 
-  Future<List<AniListUserList>> getUserLists({AniListMediaType type = AniListMediaType.Anime}) async {
+  Future<List<AniListUserList>> getUserLists(
+      {AniListMediaType type = AniListMediaType.Anime}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(GetUserLists),
       variables: <String, dynamic>{

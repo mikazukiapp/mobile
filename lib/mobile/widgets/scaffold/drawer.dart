@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:mikazuki/mobile/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MikazukiDrawer extends StatefulWidget {
   MikazukiDrawer({Key key}) : super(key: key);
@@ -11,13 +15,11 @@ class MikazukiDrawer extends StatefulWidget {
 
 class _MikazukiDrawerState extends State<MikazukiDrawer> {
   int _selectedIndex;
+  Box<dynamic> userDataBox;
+  String userAvatarImageLink;
+  String userBannerImage;
 
   List<Widget> routes = <Widget>[
-    UserAccountsDrawerHeader(
-      currentAccountPicture: SvgPicture.asset(kMikazukiSvgLogo),
-      accountName: Text('NicoAiko'),
-      accountEmail: null,
-    ),
     ListTile(
       title: Text('Lists'),
       leading: Icon(Icons.list),
@@ -63,13 +65,40 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
   void initState() {
     super.initState();
     _selectedIndex = 0;
+    userDataBox = Hive.box('anilist_userdata');
+    userAvatarImageLink = userDataBox.get('avatars')?.getSmallest();
+    userBannerImage = userDataBox.get('bannerImage');
+
+    routes.insert(
+      0,
+      DrawerHeader(
+        child: Container(
+          alignment: Alignment.centerLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                child: CachedNetworkImage(
+                  imageUrl: userAvatarImageLink,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              Text('NicoAiko'),
+            ],
+          ),
+        ),
+      ),
+    );
 
     Future.delayed(Duration.zero, () {
       String routeName = ModalRoute.of(context).settings.name;
       setState(() {
         _selectedIndex = routeIndicies[routeName] ?? 0;
-        print(routeName);
-        print(_selectedIndex);
       });
     });
   }
@@ -77,13 +106,37 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: ListView.builder(
-        itemCount: routes.length,
-        itemBuilder: (context, index) {
-          return _getRoute(context, index);
-        },
-        // Seems to be important
-        padding: EdgeInsets.zero,
+      child: Stack(
+        children: [
+          if (userBannerImage != null)
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(userBannerImage),
+                ),
+              ),
+            ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.75),
+            ),
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              color: Colors.black.withOpacity(0),
+            ),
+          ),
+          ListView.builder(
+            itemCount: routes.length,
+            itemBuilder: (context, index) {
+              return _getRoute(context, index);
+            },
+            // Seems to be important
+            padding: EdgeInsets.zero,
+          ),
+        ],
       ),
     );
   }
