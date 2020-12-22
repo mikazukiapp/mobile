@@ -1,9 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
-import 'package:mikazuki/mobile/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class MikazukiDrawer extends StatefulWidget {
@@ -74,21 +72,31 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
       DrawerHeader(
         child: Container(
           alignment: Alignment.centerLeft,
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              ClipRRect(
-                child: CachedNetworkImage(
-                  imageUrl: userAvatarImageLink,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+              Flexible(
+                flex: 1,
+                child: ClipRRect(
+                  child: CachedNetworkImage(
+                    imageUrl: userAvatarImageLink,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  borderRadius: BorderRadius.circular(4.0),
                 ),
-                borderRadius: BorderRadius.circular(4.0),
               ),
-              Text('NicoAiko'),
+              Flexible(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text('NicoAiko'),
+                ),
+              ),
             ],
           ),
         ),

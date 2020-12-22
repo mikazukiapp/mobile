@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mikazuki/mobile/config.dart';
 import 'package:mikazuki/mobile/constants.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
@@ -25,9 +24,11 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      leading: IconButton(icon: SvgPicture.asset(kMikazukiSvgLogo), onPressed: () {
-        Scaffold.of(context).openDrawer();
-      }),
+      leading: IconButton(
+          icon: SvgPicture.asset(kMikazukiSvgLogo),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          }),
       title: widget.title != null ? Text(widget.title) : null,
       actions: <Widget>[
         IconButton(
@@ -49,15 +50,15 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
                 Navigator.pushNamed(context, '/login');
               }
             }),
-      //   IconButton(
-      //       icon: appTheme.currentTheme() == ThemeMode.light
-      //           ? Icon(Icons.lightbulb, color: Colors.yellow)
-      //           : Icon(Icons.lightbulb_outline, color: Colors.white),
-      //       onPressed: () {
-      //         setState(() {
-      //           appTheme.switchTheme();
-      //         });
-      //       })
+        //   IconButton(
+        //       icon: appTheme.currentTheme() == ThemeMode.light
+        //           ? Icon(Icons.lightbulb, color: Colors.yellow)
+        //           : Icon(Icons.lightbulb_outline, color: Colors.white),
+        //       onPressed: () {
+        //         setState(() {
+        //           appTheme.switchTheme();
+        //         });
+        //       })
       ],
     );
   }
