@@ -21,18 +21,15 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
     ListTile(
       title: Text('Lists'),
       leading: Icon(Icons.list),
-      onTap: () {},
     ),
     ListTile(
       title: Text('Search'),
       leading: Icon(Icons.search),
-      onTap: () {},
     ),
     Divider(),
     ListTile(
       title: Text('Settings'),
       leading: Icon(Icons.settings),
-      onTap: () {},
     ),
   ];
 
@@ -42,18 +39,28 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
     '/settings': 4,
   };
 
+  List<String> routeNames = [
+    null,
+    '/overview',
+    '/search',
+    null,
+    '/settings',
+  ];
+
   Widget _getRoute(BuildContext context, int index) {
     bool isSelected = _selectedIndex == index;
 
     dynamic widget = routes[index];
+    String route = routeNames[index];
 
     if (widget is ListTile) {
       return ListTile(
-        title: widget.title,
-        leading: widget.leading,
-        selected: isSelected,
-        onTap: widget.onTap,
-      );
+          title: widget.title,
+          leading: widget.leading,
+          selected: isSelected,
+          onTap: () {
+            Navigator.pushNamed(context, route);
+          });
     }
 
     return widget;
