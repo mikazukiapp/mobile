@@ -26,25 +26,26 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
       title: Text('Search'),
       leading: Icon(Icons.search),
     ),
-    Divider(),
-    ListTile(
-      title: Text('Settings'),
-      leading: Icon(Icons.settings),
-    ),
+    // TODO: Reimplement when working on settings page
+    // Divider(),
+    // ListTile(
+    //   title: Text('Settings'),
+    //   leading: Icon(Icons.settings),
+    // ),
   ];
 
   Map<String, int> routeIndicies = {
     '/overview': 1,
     '/search': 2,
-    '/settings': 4,
+    // '/settings': 4,
   };
 
   List<String> routeNames = [
     null,
     '/overview',
     '/search',
-    null,
-    '/settings',
+    // null,
+    // '/settings',
   ];
 
   Widget _getRoute(BuildContext context, int index) {
@@ -138,7 +139,7 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
             ),
           ),
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
             child: Container(
               color: Colors.black.withOpacity(0),
             ),
