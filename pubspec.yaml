@@ -68,6 +68,7 @@ flutter:
   assets:
     - assets/images/appLogos/AppLogo.png
     - assets/images/appLogos/Mikazuki.svg
+    - assets/images/appLogos/AniListLogo.svg
     - .env
 
   fonts:
