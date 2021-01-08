@@ -4,8 +4,6 @@ import 'package:mikazuki/mobile/constants.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
-import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
-import 'package:mikazuki/shared/Storage/actions.dart';
 
 class MikazukiAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -38,9 +36,7 @@ class MikazukiAppBarState extends State<MikazukiAppBar> {
             onPressed: () {
               if (AniListRepository.getInstance().isLoggedIn) {
                 print('Logging out...');
-                AniListRepository.getInstance().isLoggedIn = false;
-                GraphQLConfiguration.removeToken();
-                SecureStorageActions.delete('anilist_token');
+                AniListRepository.getInstance().logout();
                 Navigator.pushAndRemoveUntil(
                     context,
                     NoAnimationMaterialPageRoute(
