@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
+import 'package:mikazuki/mobile/pages/login.dart';
+import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 
 class MikazukiDrawer extends StatefulWidget {
@@ -75,6 +77,26 @@ class _MikazukiDrawerState extends State<MikazukiDrawer> {
         },
       ),
     );
+
+    if (isLoggedIn) {
+      routes.add(
+        ListTile(
+          title: Text('Logout'),
+          leading: Icon(Icons.logout),
+          onTap: () {
+            print('Logging out...');
+            AniListRepository.getInstance().logout();
+            Navigator.pushAndRemoveUntil(
+              context,
+              NoAnimationMaterialPageRoute(
+                builder: (BuildContext context) => LoginScreenWidget(),
+              ),
+              (route) => false,
+            );
+          },
+        ),
+      );
+    }
 
     return routes;
   }
