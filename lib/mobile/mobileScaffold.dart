@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mikazuki/mobile/config.dart';
 import 'package:mikazuki/mobile/widgets/scaffold/appBar.dart';
+import 'package:mikazuki/mobile/widgets/scaffold/drawer.dart';
 // import 'package:mikazuki/mobile/widgets/scaffold/bottomNavigationBar.dart';
 
 class MikazukiScaffold extends StatefulWidget {
@@ -32,6 +33,7 @@ class _MikazukiScaffoldState extends State<MikazukiScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MikazukiAppBar(title: 'Mikazuki'),
+      drawer: MikazukiDrawer(),
       // bottomNavigationBar: MikazukiBottomNavBar(),
       body: _body,
     );

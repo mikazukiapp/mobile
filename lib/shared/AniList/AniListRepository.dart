@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
+import 'package:hive/hive.dart';
 import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
 import 'package:mikazuki/shared/AniList/mutations/AddEntry.gql.dart';
 import 'package:mikazuki/shared/AniList/mutations/AddEntry.interface.dart';
@@ -17,6 +18,7 @@ import 'package:mikazuki/shared/AniList/types/User.dart';
 import 'package:mikazuki/shared/AniList/types/UserList.dart';
 import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
 import 'package:mikazuki/shared/AniList/types/UserListStatus.dart';
+import 'package:mikazuki/shared/Storage/actions.dart';
 
 class AniListRepository with ChangeNotifier {
   static AniListRepository _instance;
@@ -70,7 +72,22 @@ class AniListRepository with ChangeNotifier {
       return null;
     }
 
-    return AniListUser.fromJson(result.data['user']);
+    AniListUser user = AniListUser.fromJson(result.data['user']);
+
+    Box<dynamic> box = Hive.box('anilist_userdata');
+    await box.clear();
+    await box.put('avatars', user.avatar);
+    await box.put('bannerImage', user.bannerImage);
+    await box.put('username', user.name);
+
+    return user;
+  }
+
+  Future<void> logout() async {
+    await Hive.box('anilist_userdata').clear();
+    GraphQLConfiguration.removeToken();
+    SecureStorageActions.delete('anilist_token');
+    isLoggedIn = false;
   }
 
   Future<List<SearchResult>> searchAnime(String query) async {
@@ -102,7 +119,8 @@ class AniListRepository with ChangeNotifier {
     return results;
   }
 
-  Future<List<AniListUserList>> getUserLists({AniListMediaType type = AniListMediaType.Anime}) async {
+  Future<List<AniListUserList>> getUserLists(
+      {AniListMediaType type = AniListMediaType.Anime}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(GetUserLists),
       variables: <String, dynamic>{
