@@ -11,7 +11,10 @@ import 'package:mikazuki/shared/AniList/mutations/UpdateEntry.interface.dart';
 import 'package:mikazuki/shared/AniList/query/GetCurrentUser.gql.dart';
 import 'package:mikazuki/shared/AniList/query/GetUserLists.gql.dart';
 import 'package:mikazuki/shared/AniList/query/SearchAnime.gql.dart';
+import 'package:mikazuki/shared/AniList/query/SearchMedia.gql.dart';
+import 'package:mikazuki/shared/AniList/query/interfaces/SearchMedia.interface.dart';
 import 'package:mikazuki/shared/AniList/types/DateInput.dart';
+import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/MediaType.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 import 'package:mikazuki/shared/AniList/types/User.dart';
@@ -88,6 +91,42 @@ class AniListRepository with ChangeNotifier {
     GraphQLConfiguration.removeToken();
     SecureStorageActions.delete('anilist_token');
     isLoggedIn = false;
+  }
+
+  Future<List<AniListMedia>> searchMedia(String query,
+      {AniListMediaType type,
+      List<String> genres,
+      bool onList,
+      bool isAdult}) async {
+    Map<String, dynamic> variables = ISearchMedia(
+            query: query,
+            type: type,
+            genres: genres,
+            onList: onList,
+            isAdult: isAdult)
+        .toJson();
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(SearchMedia),
+      variables: variables,
+    );
+
+    final GraphQLConfiguration config = new GraphQLConfiguration();
+    final GraphQLClient client = config.clientToQuery();
+    final QueryResult result = await client.query(options);
+
+    if (result.hasException) {
+      print(result.exception.toString());
+      return null;
+    }
+
+    final List<dynamic> data = result.data['page']['media'] as List<dynamic>;
+    final List<AniListMedia> results = [];
+
+    data.forEach((element) {
+      results.add(AniListMedia.fromJson(element));
+    });
+
+    return results;
   }
 
   Future<List<SearchResult>> searchAnime(String query) async {

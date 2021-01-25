@@ -32,12 +32,12 @@ Map<String, dynamic> _$AniListUserListEntryToJson(
         AniListUserListEntry instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'progress': instance.progress,
-      'progressVolumes': instance.progressVolumes,
-      'status': _$AniListUserListStatusEnumMap[instance.status],
-      'score': instance.score,
       'updatedAt': instance.updatedAt,
       'media': instance.media,
+      'progress': instance.progress,
+      'progressVolumes': instance.progressVolumes,
+      'score': instance.score,
+      'status': _$AniListUserListStatusEnumMap[instance.status],
       'startedAt': instance.startedAt,
       'completedAt': instance.completedAt,
     };

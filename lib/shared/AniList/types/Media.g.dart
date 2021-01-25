@@ -10,7 +10,10 @@ AniListMedia _$AniListMediaFromJson(Map<String, dynamic> json) {
   return AniListMedia(
     id: json['id'] as int,
     episodes: json['episodes'] as int,
+    chapters: json['chapters'] as int,
+    volumes: json['volumes'] as int,
     type: _$enumDecodeNullable(_$AniListMediaTypeEnumMap, json['type']),
+    format: _$enumDecodeNullable(_$AniListMediaFormatEnumMap, json['format']),
     status: _$enumDecodeNullable(_$AniListMediaStatusEnumMap, json['status']),
     coverImage: json['coverImage'] == null
         ? null
@@ -30,7 +33,10 @@ Map<String, dynamic> _$AniListMediaToJson(AniListMedia instance) =>
     <String, dynamic>{
       'id': instance.id,
       'episodes': instance.episodes,
+      'chapters': instance.chapters,
+      'volumes': instance.volumes,
       'type': _$AniListMediaTypeEnumMap[instance.type],
+      'format': _$AniListMediaFormatEnumMap[instance.format],
       'coverImage': instance.coverImage,
       'title': instance.title,
       'nextAiringEpisode': instance.nextAiringEpisode,
@@ -72,6 +78,19 @@ T _$enumDecodeNullable<T>(
 const _$AniListMediaTypeEnumMap = {
   AniListMediaType.Anime: 'ANIME',
   AniListMediaType.Manga: 'MANGA',
+};
+
+const _$AniListMediaFormatEnumMap = {
+  AniListMediaFormat.TV: 'TV',
+  AniListMediaFormat.TVShort: 'TV_SHORT',
+  AniListMediaFormat.Movie: 'MOVIE',
+  AniListMediaFormat.Special: 'SPECIAL',
+  AniListMediaFormat.OVA: 'OVA',
+  AniListMediaFormat.ONA: 'ONA',
+  AniListMediaFormat.Music: 'MUSIC',
+  AniListMediaFormat.Manga: 'MANGA',
+  AniListMediaFormat.Novel: 'NOVEL',
+  AniListMediaFormat.OneShot: 'ONE_SHOT',
 };
 
 const _$AniListMediaStatusEnumMap = {
