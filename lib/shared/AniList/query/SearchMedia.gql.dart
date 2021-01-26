@@ -7,6 +7,7 @@ query searchMedia($query: String!, $type: MediaType, $genres: [String], $onList:
         userPreferred
       }
       averageScore
+      meanScore
       coverImage {
         extraLarge
       }
