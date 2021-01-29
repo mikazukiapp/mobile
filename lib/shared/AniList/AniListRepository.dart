@@ -69,22 +69,10 @@ class AniListRepository with ChangeNotifier {
   }
 
   Future<AniListUser> getUserData() async {
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(GetCurrentUser),
-    );
-
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    AniListUser user = AniListUser.fromJson(result.data['user']);
-
+    AniListUser user = await this._fetchOne(
+        GetCurrentUser, null, ['user'], (json) => AniListUser.fromJson(json));
     Box<dynamic> box = Hive.box('anilist_userdata');
+
     await box.clear();
     await box.put('avatars', user.avatar);
     await box.put('bannerImage', user.bannerImage);
@@ -128,131 +116,44 @@ class AniListRepository with ChangeNotifier {
             onList: onList,
             isAdult: isAdult)
         .toJson();
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(SearchMedia),
-      variables: variables,
-    );
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    final List<dynamic> data = result.data['page']['media'] as List<dynamic>;
-    final List<AniListMedia> results = [];
-
-    data.forEach((element) {
-      results.add(AniListMedia.fromJson(element));
-    });
-
-    return results;
+    return this._fetchAll<AniListMedia>(SearchMedia, variables,
+        ['page', 'media'], (json) => AniListMedia.fromJson(json));
   }
 
   Future<List<AniListCharacter>> searchCharacters(String query,
       {AniListMediaType type, bool onList}) async {
     Map<String, dynamic> variables =
         ISearchMedia(query: query, type: type, onList: onList).toJson();
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(SearchCharacter),
-      variables: variables,
-    );
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    final List<dynamic> data =
-        result.data['page']['characters'] as List<dynamic>;
-    final List<AniListCharacter> results = [];
-
-    data.forEach((element) {
-      results.add(AniListCharacter.fromJson(element));
-    });
-
-    return results;
+    return this._fetchAll<AniListCharacter>(SearchCharacter, variables,
+        ['page', 'characters'], (json) => AniListCharacter.fromJson(json));
   }
 
   Future<List<AniListStaff>> searchStaff(String query, {bool onList}) async {
     Map<String, dynamic> variables =
         ISearchStaff(query: query, onList: onList).toJson();
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(SearchStaff),
-      variables: variables,
-    );
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    final List<dynamic> data = result.data['page']['staff'] as List<dynamic>;
-    final List<AniListStaff> results = [];
-
-    data.forEach((element) {
-      results.add(AniListStaff.fromJson(element));
-    });
-
-    return results;
+    return this._fetchAll<AniListStaff>(SearchStaff, variables,
+        ['page', 'staff'], (json) => AniListStaff.fromJson(json));
   }
 
   Future<AniListStaff> getStaffMember(int id,
       {AniListMediaType type, bool onList}) async {
     Map<String, dynamic> variables =
         IGetStaffMember(id: id, type: type, onList: onList).toJson();
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(GetStaffMember),
-      variables: variables,
-    );
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    return AniListStaff.fromJson(result.data['staff']);
+    return this._fetchOne<AniListStaff>(GetStaffMember, variables, ['staff'],
+        (json) => AniListStaff.fromJson(json));
   }
 
   Future<List<AniListUserList>> getUserLists(
       {AniListMediaType type = AniListMediaType.Anime}) async {
-    final QueryOptions options = QueryOptions(
-      documentNode: gql(GetUserLists),
-      variables: IGetUserLists(userName: this.username, type: type).toJson(),
-    );
+    Map<String, dynamic> variables =
+        IGetUserLists(userName: this.username, type: type).toJson();
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    final List<dynamic> data = result.data['collection']['lists'];
-    final List<AniListUserList> lists = [];
-
-    data.forEach((element) {
-      lists.add(AniListUserList.fromJson(element));
-    });
-
-    return lists;
+    return this._fetchAll<AniListUserList>(GetUserLists, variables,
+        ['collection', 'lists'], (json) => AniListUserList.fromJson(json));
   }
 
   Future<AniListUserList> getUserListByStatus(
@@ -264,43 +165,20 @@ class AniListRepository with ChangeNotifier {
       status: status,
     ).toJson();
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryOptions options =
-        QueryOptions(documentNode: gql(GetUserLists), variables: variables);
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return null;
-    }
-
-    final Map<String, dynamic> data = result.data['collection']['lists'][0];
-
-    return AniListUserList.fromJson(data);
+    return this._fetchOne<AniListUserList>(GetUserLists, variables,
+        ['collection', 'lists', 0], (json) => AniListUserList.fromJson(json));
   }
 
   /// Sends an add entry request to AniList with [mediaId], [status] and if set, [progress] and [score].
   ///
   /// Returns true if successful.
   Future<bool> addEntry(int mediaId, AniListUserListStatus status,
-      {int progress, double score}) async {
+      {int progress, double score}) {
     Map<String, dynamic> variables = IAddEntry(
             mediaId: mediaId, status: status, score: score, progress: progress)
         .toJson();
 
-    final GraphQLConfiguration config = new GraphQLConfiguration();
-    final GraphQLClient client = config.clientToQuery();
-    final QueryOptions options =
-        QueryOptions(documentNode: gql(AddEntry), variables: variables);
-    final QueryResult result = await client.query(options);
-
-    if (result.hasException) {
-      print(result.exception.toString());
-      return false;
-    }
-
-    return true;
+    return this._commitMutation(AddEntry, variables);
   }
 
   Future<AniListUserListEntry> updateEntry(int entryId,
@@ -320,10 +198,25 @@ class AniListRepository with ChangeNotifier {
             completedAt: completedAt)
         .toJson();
 
+    return this._fetchOne<AniListUserListEntry>(UpdateEntry, variables,
+        ['media'], (json) => AniListUserListEntry.fromJson(json));
+  }
+
+  Future<bool> removeEntry(int entryId) {
+    final Map<String, dynamic> variables = {'entryId': entryId};
+
+    return this._commitMutation(RemoveEntry, variables);
+  }
+
+  Future<List<T>> _fetchAll<T>(
+      String gqlNode,
+      Map<String, dynamic> variables,
+      List<dynamic> accessProperty,
+      T factory(Map<String, dynamic> json)) async {
     final GraphQLConfiguration config = new GraphQLConfiguration();
     final GraphQLClient client = config.clientToQuery();
     final QueryOptions options =
-        QueryOptions(documentNode: gql(UpdateEntry), variables: variables);
+        QueryOptions(documentNode: gql(gqlNode), variables: variables);
     final QueryResult result = await client.query(options);
 
     if (result.hasException) {
@@ -331,15 +224,41 @@ class AniListRepository with ChangeNotifier {
       return null;
     }
 
-    return AniListUserListEntry.fromJson(result.data['media']);
+    final List<dynamic> data = _getByPath(result.data, accessProperty);
+    final List<T> lists = [];
+
+    data.forEach((element) {
+      lists.add(factory(element));
+    });
+
+    return lists;
   }
 
-  Future<bool> removeEntry(int entryId) async {
-    final Map<String, dynamic> variables = {'entryId': entryId};
+  Future<T> _fetchOne<T>(
+      String gqlNode,
+      Map<String, dynamic> variables,
+      List<dynamic> accessProperty,
+      T factory(Map<String, dynamic> json)) async {
     final GraphQLConfiguration config = new GraphQLConfiguration();
     final GraphQLClient client = config.clientToQuery();
     final QueryOptions options =
-        QueryOptions(documentNode: gql(RemoveEntry), variables: variables);
+        QueryOptions(documentNode: gql(gqlNode), variables: variables);
+    final QueryResult result = await client.query(options);
+
+    if (result.hasException) {
+      print(result.exception.toString());
+      return null;
+    }
+
+    return factory(_getByPath(result.data, accessProperty));
+  }
+
+  Future<bool> _commitMutation(
+      String gqlNode, Map<String, dynamic> variables) async {
+    final GraphQLConfiguration config = new GraphQLConfiguration();
+    final GraphQLClient client = config.clientToQuery();
+    final QueryOptions options =
+        QueryOptions(documentNode: gql(gqlNode), variables: variables);
     final QueryResult result = await client.query(options);
 
     if (result.hasException) {
@@ -348,5 +267,20 @@ class AniListRepository with ChangeNotifier {
     }
 
     return true;
+  }
+
+  dynamic _getByPath(dynamic object, List<dynamic> path) {
+    dynamic current = object;
+
+    path.forEach((element) {
+      if (element is! String && element is! int) {
+        throw new Exception(
+            'Path element was expected to be a string or an integer!');
+      }
+
+      current = current[element];
+    });
+
+    return current;
   }
 }
