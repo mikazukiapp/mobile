@@ -15,6 +15,7 @@ import 'package:mikazuki/shared/AniList/query/SearchCharacter.gql.dart';
 import 'package:mikazuki/shared/AniList/query/SearchMedia.gql.dart';
 import 'package:mikazuki/shared/AniList/query/SearchStaff.gql.dart';
 import 'package:mikazuki/shared/AniList/query/interfaces/GetStaffMember.interface.dart';
+import 'package:mikazuki/shared/AniList/query/interfaces/GetUserLists.interface.dart';
 import 'package:mikazuki/shared/AniList/query/interfaces/SearchMedia.interface.dart';
 import 'package:mikazuki/shared/AniList/query/interfaces/SearchStaff.interface.dart';
 import 'package:mikazuki/shared/AniList/types/Character.dart';
@@ -232,10 +233,7 @@ class AniListRepository with ChangeNotifier {
       {AniListMediaType type = AniListMediaType.Anime}) async {
     final QueryOptions options = QueryOptions(
       documentNode: gql(GetUserLists),
-      variables: <String, dynamic>{
-        'userName': this.username,
-        'type': getStringifiedAniListMediaType(type),
-      },
+      variables: IGetUserLists(userName: this.username, type: type).toJson(),
     );
 
     final GraphQLConfiguration config = new GraphQLConfiguration();
@@ -257,14 +255,14 @@ class AniListRepository with ChangeNotifier {
     return lists;
   }
 
-  // TODO: Create interfaces for queries too
-  Future<AniListUserList> getUserListByStatus(AniListUserListStatus status,
+  Future<AniListUserList> getUserListByStatus(
+      List<AniListUserListStatus> status,
       {AniListMediaType type = AniListMediaType.Anime}) async {
-    Map<String, dynamic> variables = <String, dynamic>{
-      'userName': this.username,
-      'type': getStringifiedAniListMediaType(type),
-      'status': [getStringifiedAniListUserListStatus(status)],
-    };
+    Map<String, dynamic> variables = IGetUserLists(
+      userName: this.username,
+      type: type,
+      status: status,
+    ).toJson();
 
     final GraphQLConfiguration config = new GraphQLConfiguration();
     final GraphQLClient client = config.clientToQuery();

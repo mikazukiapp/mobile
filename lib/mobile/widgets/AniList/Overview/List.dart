@@ -26,8 +26,7 @@ class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget>
 
     _isLoading = true;
     AniListRepository.getInstance()
-        .getUserListByStatus(widget.status)
-        .then((value) {
+        .getUserListByStatus([widget.status]).then((value) {
       setState(() {
         _userList = value;
       });
@@ -69,8 +68,7 @@ class _AniListOverviewListWidgetState extends State<AniListOverviewListWidget>
         setState(() {
           _isLoading = true;
           AniListRepository.getInstance()
-              .getUserListByStatus(widget.status)
-              .then((value) {
+              .getUserListByStatus([widget.status]).then((value) {
             setState(() {
               _userList = value;
             });
