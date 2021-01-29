@@ -9,14 +9,20 @@ import 'package:mikazuki/shared/AniList/mutations/RemoveEntry.gql.dart';
 import 'package:mikazuki/shared/AniList/mutations/UpdateEntry.gql.dart';
 import 'package:mikazuki/shared/AniList/mutations/UpdateEntry.interface.dart';
 import 'package:mikazuki/shared/AniList/query/GetCurrentUser.gql.dart';
+import 'package:mikazuki/shared/AniList/query/GetStaffMember.gql.dart';
 import 'package:mikazuki/shared/AniList/query/GetUserLists.gql.dart';
-import 'package:mikazuki/shared/AniList/query/SearchAnime.gql.dart';
+import 'package:mikazuki/shared/AniList/query/SearchCharacter.gql.dart';
 import 'package:mikazuki/shared/AniList/query/SearchMedia.gql.dart';
+import 'package:mikazuki/shared/AniList/query/SearchStaff.gql.dart';
+import 'package:mikazuki/shared/AniList/query/interfaces/GetStaffMember.interface.dart';
 import 'package:mikazuki/shared/AniList/query/interfaces/SearchMedia.interface.dart';
+import 'package:mikazuki/shared/AniList/query/interfaces/SearchStaff.interface.dart';
+import 'package:mikazuki/shared/AniList/types/Character.dart';
 import 'package:mikazuki/shared/AniList/types/DateInput.dart';
 import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/MediaType.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
+import 'package:mikazuki/shared/AniList/types/Staff.dart';
 import 'package:mikazuki/shared/AniList/types/User.dart';
 import 'package:mikazuki/shared/AniList/types/UserList.dart';
 import 'package:mikazuki/shared/AniList/types/UserListEntry.dart';
@@ -93,6 +99,22 @@ class AniListRepository with ChangeNotifier {
     isLoggedIn = false;
   }
 
+  Future<AniListSearchResult> searchAll(String query,
+      {AniListMediaType type,
+      List<String> genres,
+      bool onList,
+      bool isAdult}) async {
+    final List<AniListMedia> media = await this.searchMedia(query,
+        type: type, genres: genres, onList: onList, isAdult: isAdult);
+    final List<AniListCharacter> characters =
+        await this.searchCharacters(query, type: type, onList: onList);
+    final List<AniListStaff> staff =
+        await this.searchStaff(query, onList: onList);
+
+    return AniListSearchResult(
+        characters: characters, media: media, staff: staff);
+  }
+
   Future<List<AniListMedia>> searchMedia(String query,
       {AniListMediaType type,
       List<String> genres,
@@ -129,15 +151,14 @@ class AniListRepository with ChangeNotifier {
     return results;
   }
 
-  Future<List<SearchResult>> searchAnime(String query) async {
+  Future<List<AniListCharacter>> searchCharacters(String query,
+      {AniListMediaType type, bool onList}) async {
+    Map<String, dynamic> variables =
+        ISearchMedia(query: query, type: type, onList: onList).toJson();
     final QueryOptions options = QueryOptions(
-        documentNode: gql(SearchAnime),
-        variables: <String, dynamic>{
-          'query': query,
-          'type': 'ANIME',
-          'onList': false,
-          'isAdult': false,
-        });
+      documentNode: gql(SearchCharacter),
+      variables: variables,
+    );
 
     final GraphQLConfiguration config = new GraphQLConfiguration();
     final GraphQLClient client = config.clientToQuery();
@@ -148,14 +169,63 @@ class AniListRepository with ChangeNotifier {
       return null;
     }
 
-    final List<dynamic> data = result.data['page']['media'] as List<dynamic>;
-    final List<SearchResult> results = [];
+    final List<dynamic> data =
+        result.data['page']['characters'] as List<dynamic>;
+    final List<AniListCharacter> results = [];
 
     data.forEach((element) {
-      results.add(SearchResult.fromJson(element));
+      results.add(AniListCharacter.fromJson(element));
     });
 
     return results;
+  }
+
+  Future<List<AniListStaff>> searchStaff(String query, {bool onList}) async {
+    Map<String, dynamic> variables =
+        ISearchStaff(query: query, onList: onList).toJson();
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(SearchStaff),
+      variables: variables,
+    );
+
+    final GraphQLConfiguration config = new GraphQLConfiguration();
+    final GraphQLClient client = config.clientToQuery();
+    final QueryResult result = await client.query(options);
+
+    if (result.hasException) {
+      print(result.exception.toString());
+      return null;
+    }
+
+    final List<dynamic> data = result.data['page']['staff'] as List<dynamic>;
+    final List<AniListStaff> results = [];
+
+    data.forEach((element) {
+      results.add(AniListStaff.fromJson(element));
+    });
+
+    return results;
+  }
+
+  Future<AniListStaff> getStaffMember(int id,
+      {AniListMediaType type, bool onList}) async {
+    Map<String, dynamic> variables =
+        IGetStaffMember(id: id, type: type, onList: onList).toJson();
+    final QueryOptions options = QueryOptions(
+      documentNode: gql(GetStaffMember),
+      variables: variables,
+    );
+
+    final GraphQLConfiguration config = new GraphQLConfiguration();
+    final GraphQLClient client = config.clientToQuery();
+    final QueryResult result = await client.query(options);
+
+    if (result.hasException) {
+      print(result.exception.toString());
+      return null;
+    }
+
+    return AniListStaff.fromJson(result.data['staff']);
   }
 
   Future<List<AniListUserList>> getUserLists(

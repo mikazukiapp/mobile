@@ -1,11 +1,16 @@
-class PageInfo {
+import 'package:json_annotation/json_annotation.dart';
+
+part 'PageInfo.g.dart';
+
+@JsonSerializable()
+class AniListPageInfo {
   final int total;
   final int perPage;
   final int currentPage;
   final int lastPage;
   final bool hasNextPage;
 
-  PageInfo({
+  AniListPageInfo({
     this.total,
     this.perPage,
     this.currentPage,
@@ -13,13 +18,7 @@ class PageInfo {
     this.hasNextPage,
   });
 
-  factory PageInfo.fromJson(Map<String, dynamic> json) {
-    return PageInfo(
-      total: json['total'],
-      perPage: json['perPage'],
-      currentPage: json['currentPage'],
-      lastPage: json['lastPage'],
-      hasNextPage: json['hasNextPage'],
-    );
-  }
+  factory AniListPageInfo.fromJson(Map<String, dynamic> json) =>
+      _$AniListPageInfoFromJson(json);
+  Map<String, dynamic> toJson() => _$AniListPageInfoToJson(this);
 }

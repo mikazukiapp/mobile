@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
-import 'package:mikazuki/shared/AniList/types/MediaType.dart';
-import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 import 'package:mikazuki/mobile/widgets/search/resultItem.dart';
 
 class SearchResultWidget extends StatefulWidget {
