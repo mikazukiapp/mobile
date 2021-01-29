@@ -51,3 +51,6 @@ app.*.map.json
 
 # VSCode stuff
 .vscode/
+
+# Auto-generated dart files
+*.g.dart

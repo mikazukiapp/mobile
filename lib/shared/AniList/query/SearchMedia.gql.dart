@@ -1,5 +1,5 @@
-const String SearchAnime = r'''
-query searchAnime($query: String!, $type: MediaType!, $genres: [String], $onList: Boolean, $isAdult: Boolean) {
+const String SearchMedia = r'''
+query searchMedia($query: String!, $type: MediaType, $genres: [String], $onList: Boolean, $isAdult: Boolean) {
   page: Page {
     media(search: $query, type: $type, genre_in: $genres, onList: $onList, isAdult: $isAdult) {
       id
@@ -7,11 +7,16 @@ query searchAnime($query: String!, $type: MediaType!, $genres: [String], $onList
         userPreferred
       }
       averageScore
+      meanScore
       coverImage {
         extraLarge
       }
       episodes
+      chapters
+      volumes
       status
+      type
+      format
       nextAiringEpisode {
         episode
       }
@@ -27,6 +32,7 @@ query searchAnime($query: String!, $type: MediaType!, $genres: [String], $onList
         status
         score
         progress
+        progressVolumes
       }
     }
   }

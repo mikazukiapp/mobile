@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
 class SearchResultItem extends StatelessWidget {
   SearchResultItem(this.item);
 
-  final SearchResult item;
+  final dynamic item;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,8 @@ class SearchResultItem extends StatelessWidget {
                 child: Image.network(
                   item.coverImage.getSmallest(),
                   fit: BoxFit.fitHeight,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent loadingProgress) {
                     if (loadingProgress == null) {
                       return child;
                     }
@@ -43,7 +43,7 @@ class SearchResultItem extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(left: 8.0, top: 4.0),
+              padding: EdgeInsets.only(left: 8.0, top: 0.0),
               height: 96.0,
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,14 +52,21 @@ class SearchResultItem extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(flex: 2, child: Text(item.title.userPreferred, maxLines: 3,)),
+                      Expanded(
+                          flex: 2,
+                          child: Text(
+                            item.title.userPreferred,
+                            maxLines: 3,
+                          )),
                       Container(
                         padding: EdgeInsets.only(left: 4.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              item.averageScore?.toString() ?? '---',
+                              item.averageScore?.toString() ??
+                                  item.meanScore?.toString() ??
+                                  '---',
                               style: TextStyle(
                                 // color: Colors.grey[700],
                                 fontSize: 12.0,
@@ -107,22 +114,22 @@ class SearchResultItem extends StatelessWidget {
     //           Center(
     //             child: ClipRRect(
     //               borderRadius: BorderRadius.circular(8.0),
-                  // child: Image.network(
-                  //   item.coverImage.getSmallest(),
-                  //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                  //     if (loadingProgress == null) {
-                  //       return child;
-                  //     }
+    // child: Image.network(
+    //   item.coverImage.getSmallest(),
+    //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+    //     if (loadingProgress == null) {
+    //       return child;
+    //     }
 
-                  //     return Center(
-                  //       child: SizedBox(
-                  //         width: 24.0,
-                  //         height: 24.0,
-                  //         child: CircularProgressIndicator(strokeWidth: 2.0),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
+    //     return Center(
+    //       child: SizedBox(
+    //         width: 24.0,
+    //         height: 24.0,
+    //         child: CircularProgressIndicator(strokeWidth: 2.0),
+    //       ),
+    //     );
+    //   },
+    // ),
     //             ),
     //           ),
     //           Column(
@@ -131,14 +138,14 @@ class SearchResultItem extends StatelessWidget {
     //               Container(
     //                 width: double.infinity,
     //                 color: Color.fromARGB(122, 0, 0, 0),
-                    // child: Text(
-                    //   item.title.userPreferred,
-                    //   style: TextStyle(
-                    //     fontWeight: FontWeight.bold,
-                    //     fontSize: 24.0,
-                    //     shadows: [Shadow(blurRadius: 4.0, color: Colors.white)],
-                    //   ),
-                    // ),
+    // child: Text(
+    //   item.title.userPreferred,
+    //   style: TextStyle(
+    //     fontWeight: FontWeight.bold,
+    //     fontSize: 24.0,
+    //     shadows: [Shadow(blurRadius: 4.0, color: Colors.white)],
+    //   ),
+    // ),
     //               ),
     //             ],
     //           ),
@@ -158,20 +165,20 @@ class SearchResultItem extends StatelessWidget {
     //         child: Image.network(
     //           item.coverImage.getSmallest(),
 
-            //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-            //     if (loadingProgress == null) {
-            //       return child;
-            //     }
+    //   loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+    //     if (loadingProgress == null) {
+    //       return child;
+    //     }
 
-            //     return Center(
-            //       child: SizedBox(
-            //         width: 24.0,
-            //         height: 24.0,
-            //         child: CircularProgressIndicator(strokeWidth: 2.0),
-            //       ),
-            //     );
-            //   },
-            // ),
+    //     return Center(
+    //       child: SizedBox(
+    //         width: 24.0,
+    //         height: 24.0,
+    //         child: CircularProgressIndicator(strokeWidth: 2.0),
+    //       ),
+    //     );
+    //   },
+    // ),
     //       ),
     //       Expanded(
     //         flex: 2,

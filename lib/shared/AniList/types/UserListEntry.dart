@@ -9,12 +9,12 @@ part 'UserListEntry.g.dart';
 @JsonSerializable()
 class AniListUserListEntry {
   final int id;
-  int progress;
-  int progressVolumes;
-  AniListUserListStatus status;
-  double score;
   final int updatedAt; // Timestamp
   final AniListMedia media;
+  int progress;
+  int progressVolumes;
+  double score;
+  AniListUserListStatus status;
   AniListDateInput startedAt;
   AniListDateInput completedAt;
 

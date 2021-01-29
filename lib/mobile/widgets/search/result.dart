@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
-import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 import 'package:mikazuki/mobile/widgets/search/resultItem.dart';
 
 class SearchResultWidget extends StatefulWidget {
@@ -11,8 +10,8 @@ class SearchResultWidget extends StatefulWidget {
 }
 
 class _SearchResultWidgetState extends State<SearchResultWidget> {
-  Future<List<SearchResult>> futureResults;
-  List<SearchResult> results;
+  Future<List<dynamic>> futureResults;
+  List<dynamic> results;
   TextEditingController _controller;
   bool _isLoading;
 
@@ -36,7 +35,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
     setState(() {
       _isLoading = true;
       futureResults = AniListRepository.getInstance()
-          .searchAnime(inputQuery)
+          .searchMedia(inputQuery)
           .whenComplete(() {
         setState(() {
           _isLoading = false;
@@ -73,7 +72,8 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
               hintText: 'Title, Genre, Synonyms...',
               labelText: 'Search query',
               prefixIcon: !_isLoading
-                  ? Icon(Icons.search, color: Theme.of(context).primaryIconTheme.color)
+                  ? Icon(Icons.search,
+                      color: Theme.of(context).primaryIconTheme.color)
                   : SizedBox(
                       height: 24.0,
                       width: 24.0,
@@ -82,12 +82,14 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
                         child: CircularProgressIndicator(
                           strokeWidth: 5.0,
                           semanticsLabel: 'Search Loading Indicator',
-                          valueColor: new AlwaysStoppedAnimation(Theme.of(context).primaryIconTheme.color),
+                          valueColor: new AlwaysStoppedAnimation(
+                              Theme.of(context).primaryIconTheme.color),
                         ),
                       ),
                     ),
               suffixIcon: IconButton(
-                icon: Icon(Icons.clear, color: Theme.of(context).primaryIconTheme.color),
+                icon: Icon(Icons.clear,
+                    color: Theme.of(context).primaryIconTheme.color),
                 onPressed: () => _controller.clear(),
               ),
               border: InputBorder.none,
@@ -95,7 +97,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
           ),
         ),
         Expanded(
-          child: FutureBuilder<List<SearchResult>>(
+          child: FutureBuilder<List<dynamic>>(
             future: futureResults,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
