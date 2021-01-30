@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:hive/hive.dart';
+import 'package:mikazuki/mobile/widgets/search/SearchFilter.dart';
 import 'package:mikazuki/shared/AniList/GraphQLConfiguration.dart';
 import 'package:mikazuki/shared/AniList/mutations/AddEntry.gql.dart';
 import 'package:mikazuki/shared/AniList/mutations/AddEntry.interface.dart';
@@ -88,17 +89,47 @@ class AniListRepository with ChangeNotifier {
     isLoggedIn = false;
   }
 
+  Future<AniListSearchResult> searchAllFiltered(
+      String query, List<SearchFilter> filter) async {
+    List<AniListMedia> media = [];
+    List<AniListCharacter> characters = [];
+    List<AniListStaff> staff = [];
+
+    if (filter.contains(SearchFilter.Anime)) {
+      media.addAll(
+        await this.searchMedia(query, type: AniListMediaType.Anime),
+      );
+    }
+
+    if (filter.contains(SearchFilter.Books)) {
+      media.addAll(
+        await this.searchMedia(query, type: AniListMediaType.Manga),
+      );
+    }
+
+    if (filter.contains(SearchFilter.Characters)) {
+      characters.addAll(
+        await this.searchCharacters(query),
+      );
+    }
+
+    if (filter.contains(SearchFilter.Staff)) {
+      staff.addAll(
+        await this.searchStaff(query),
+      );
+    }
+
+    return AniListSearchResult(
+        characters: characters, media: media, staff: staff);
+  }
+
   Future<AniListSearchResult> searchAll(String query,
-      {AniListMediaType type,
-      List<String> genres,
-      bool onList,
-      bool isAdult}) async {
-    final List<AniListMedia> media = await this.searchMedia(query,
-        type: type, genres: genres, onList: onList, isAdult: isAdult);
-    final List<AniListCharacter> characters =
-        await this.searchCharacters(query, type: type, onList: onList);
-    final List<AniListStaff> staff =
-        await this.searchStaff(query, onList: onList);
+      {List<String> genres, bool onList, bool isAdult}) async {
+    List<AniListMedia> media = await this
+        .searchMedia(query, genres: genres, onList: onList, isAdult: isAdult);
+    List<AniListCharacter> characters =
+        await this.searchCharacters(query, onList: onList);
+    List<AniListStaff> staff = await this.searchStaff(query, onList: onList);
 
     return AniListSearchResult(
         characters: characters, media: media, staff: staff);
