@@ -21,7 +21,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   TextEditingController _controller;
   bool _isLoading;
 
-  // @override
+  @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: this.widget.query);

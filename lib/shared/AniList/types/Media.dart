@@ -85,6 +85,31 @@ class AniListMedia {
     }
   }
 
+  static bool isAnime(AniListMediaFormat format) {
+    return [
+      AniListMediaFormat.TV,
+      AniListMediaFormat.TVShort,
+      AniListMediaFormat.ONA,
+      AniListMediaFormat.OVA,
+      AniListMediaFormat.Movie,
+      AniListMediaFormat.Special,
+    ].contains(format);
+  }
+
+  static bool isBook(AniListMediaFormat format) {
+    return [
+      AniListMediaFormat.Manga,
+      AniListMediaFormat.OneShot,
+      AniListMediaFormat.Novel,
+    ].contains(format);
+  }
+
+  static bool isMisc(AniListMediaFormat format) {
+    return [
+      AniListMediaFormat.Music,
+    ].contains(format);
+  }
+
   factory AniListMedia.fromJson(Map<String, dynamic> json) =>
       _$AniListMediaFromJson(json);
   Map<String, dynamic> toJson() => _$AniListMediaToJson(this);

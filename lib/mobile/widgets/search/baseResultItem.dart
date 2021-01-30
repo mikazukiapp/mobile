@@ -46,7 +46,11 @@ abstract class BaseSearchResultItemWidget extends StatelessWidget {
   }
 
   Widget textContainer(BuildContext context, String title,
-      {String statusLine, String bottomLine, int titleMaxLines = 3}) {
+      {String statusLine = '',
+      String bottomLine = '',
+      int titleMaxLines = 3,
+      int statusLineMaxLines = 1,
+      int bottomLineMaxLines = 1}) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -55,8 +59,10 @@ abstract class BaseSearchResultItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             this.titleText(context, title, titleMaxLines: titleMaxLines),
-            if (statusLine.length > 0) infoText(context, statusLine),
-            if (bottomLine.length > 0) infoText(context, bottomLine),
+            if (statusLine?.isNotEmpty)
+              infoText(context, statusLine, textMaxLines: statusLineMaxLines),
+            if (bottomLine?.isNotEmpty)
+              infoText(context, bottomLine, textMaxLines: bottomLineMaxLines),
           ],
         ),
       ),
@@ -79,8 +85,8 @@ abstract class BaseSearchResultItemWidget extends StatelessWidget {
               children: [
                 Center(
                   child: SizedBox(
-                    width: 24.0,
-                    height: 24.0,
+                    width: 22.0,
+                    height: 22.0,
                     child: CircularProgressIndicator(
                       backgroundColor: Colors.transparent,
                       value: progressValue,
@@ -115,9 +121,11 @@ abstract class BaseSearchResultItemWidget extends StatelessWidget {
     );
   }
 
-  Widget infoText(BuildContext context, String text) {
+  Widget infoText(BuildContext context, String text, {int textMaxLines}) {
     return Text(
       text,
+      maxLines: textMaxLines,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontSize: 12.0,
       ),
