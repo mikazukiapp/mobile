@@ -6,6 +6,12 @@ query searchStaff($query: String!, $onList: Boolean) {
       name {
         full
       }
+      image {
+        large
+        medium
+      }
+      language
+      description
       characterMedia(onList: $onList) {
         edges {
           characterRole
