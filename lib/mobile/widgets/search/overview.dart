@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mikazuki/mobile/widgets/search/animeResultItem.dart';
 import 'package:mikazuki/mobile/widgets/search/characterResultItem.dart';
 import 'package:mikazuki/mobile/widgets/search/mangaResultItem.dart';
+import 'package:mikazuki/mobile/widgets/search/staffResultItem.dart';
 import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
@@ -31,7 +32,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
     return ListView(
       padding: EdgeInsets.all(8.0),
       children: [
-        if (anime.length > 0)
+        if (anime.isNotEmpty)
           ExpansionTile(
             title: Text('Anime (${anime.length})'),
             initiallyExpanded: true,
@@ -39,7 +40,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
               return AnimeSearchResultItemWidget(element);
             }).toList(),
           ),
-        if (books.length > 0)
+        if (books.isNotEmpty)
           ExpansionTile(
             title: Text('Books (${books.length})'),
             initiallyExpanded: anime.length == 0,
@@ -47,7 +48,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
               return MangaSearchResultItemWidget(element);
             }).toList(),
           ),
-        if (miscMedia.length > 0)
+        if (miscMedia.isNotEmpty)
           ExpansionTile(
             title: Text('Miscellaneous (${miscMedia.length})'),
             initiallyExpanded: anime.length == 0 && books.length == 0,
@@ -62,6 +63,17 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
                 anime.isEmpty && books.isEmpty && miscMedia.isEmpty,
             children: data.characters.map((element) {
               return CharacterSearchResultItemWidget(element);
+            }).toList(),
+          ),
+        if (data.staff.isNotEmpty)
+          ExpansionTile(
+            title: Text('Staff (${data.staff.length})'),
+            initiallyExpanded: anime.isEmpty &&
+                books.isEmpty &&
+                miscMedia.isEmpty &&
+                data.characters.isEmpty,
+            children: data.staff.map((element) {
+              return StaffSearchResultItemWidget(element);
             }).toList(),
           ),
       ],
