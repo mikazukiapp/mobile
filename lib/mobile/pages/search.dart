@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mikazuki/mobile/widgets/scaffold/drawer.dart';
+import 'package:mikazuki/mobile/widgets/search/SearchFilter.dart';
 import 'package:mikazuki/mobile/widgets/search/appBar.dart';
 import 'package:mikazuki/mobile/widgets/search/overview.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
@@ -14,19 +15,29 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> {
   Future<AniListSearchResult> searchResult;
   bool _isLoading;
 
-  void onSearchTrigger(String query) {
+  void onSearchTrigger(String query, List<SearchFilter> filter) {
     if (query.trim().length == 0) {
       return;
     }
 
     setState(() {
       _isLoading = true;
-      searchResult =
-          AniListRepository.getInstance().searchAll(query).whenComplete(() {
-        setState(() {
-          _isLoading = false;
+      if (filter.isNotEmpty) {
+        searchResult = AniListRepository.getInstance()
+            .searchAllFiltered(query, filter)
+            .whenComplete(() {
+          setState(() {
+            _isLoading = false;
+          });
         });
-      });
+      } else {
+        searchResult =
+            AniListRepository.getInstance().searchAll(query).whenComplete(() {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      }
     });
   }
 
