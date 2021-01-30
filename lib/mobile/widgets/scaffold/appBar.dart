@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikazuki/mobile/constants.dart';
+import 'package:mikazuki/mobile/pages/search.dart';
 
 class MikazukiAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -68,7 +69,8 @@ class MikazukiAppBarState extends State<MikazukiAppBar>
 
     print(query);
 
-    Navigator.pushNamed(context, '/search');
+    Navigator.pushNamed(context, '/search',
+        arguments: SearchScreenWidgetArguments(query));
   }
 
   @override

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mikazuki/mobile/widgets/search/animeResultItem.dart';
+import 'package:mikazuki/mobile/widgets/search/mangaResultItem.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
 import 'package:mikazuki/mobile/widgets/search/resultItem.dart';
+import 'package:mikazuki/shared/AniList/types/Media.dart';
+import 'package:mikazuki/shared/AniList/types/MediaType.dart';
 
 class SearchResultWidget extends StatefulWidget {
-  SearchResultWidget({Key key}) : super();
+  final String query;
+
+  SearchResultWidget({this.query}) : super();
 
   @override
   _SearchResultWidgetState createState() => _SearchResultWidgetState();
@@ -18,8 +24,12 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
   // @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: this.widget.query);
     _isLoading = false;
+
+    if (this.widget.query != null && this.widget.query.length > 0) {
+      this.onSearch(this.widget.query);
+    }
   }
 
   void dispose() {
@@ -103,9 +113,17 @@ class _SearchResultWidgetState extends State<SearchResultWidget> {
               if (snapshot.hasData) {
                 return ListView(
                   padding: EdgeInsets.all(12.0),
-                  children: snapshot.data
-                      .map((result) => SearchResultItem(result))
-                      .toList(),
+                  children: snapshot.data.map((result) {
+                    if (result is AniListMedia) {
+                      if (result.type == AniListMediaType.Anime) {
+                        return AnimeSearchResultItemWidget(result);
+                      } else if (result.type == AniListMediaType.Manga) {
+                        return MangaSearchResultItemWidget(result);
+                      }
+                    }
+
+                    return SearchResultItem(result);
+                  }).toList(),
                 );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");

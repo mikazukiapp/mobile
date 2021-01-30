@@ -10,8 +10,17 @@ class SearchScreenWidget extends StatefulWidget {
 class _SearchScreenWidgetState extends State<SearchScreenWidget> {
   @override
   Widget build(BuildContext context) {
+    final SearchScreenWidgetArguments args =
+        ModalRoute.of(context).settings.arguments;
+
     return MikazukiScaffold(
-      body: SearchResultWidget(),
+      body: SearchResultWidget(query: args?.query),
     );
   }
+}
+
+class SearchScreenWidgetArguments {
+  final String query;
+
+  SearchScreenWidgetArguments(this.query);
 }
