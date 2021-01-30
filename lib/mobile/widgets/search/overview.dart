@@ -3,6 +3,7 @@ import 'package:mikazuki/mobile/widgets/search/animeResultItem.dart';
 import 'package:mikazuki/mobile/widgets/search/characterResultItem.dart';
 import 'package:mikazuki/mobile/widgets/search/mangaResultItem.dart';
 import 'package:mikazuki/mobile/widgets/search/staffResultItem.dart';
+import 'package:mikazuki/mobile/widgets/util/MikazukiExpansionTile.dart';
 import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/SearchResult.dart';
 
@@ -33,7 +34,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
       padding: EdgeInsets.all(8.0),
       children: [
         if (anime.isNotEmpty)
-          ExpansionTile(
+          MikazukiExpansionTile(
             title: Text('Anime (${anime.length})'),
             initiallyExpanded: true,
             children: anime.map((element) {
@@ -41,37 +42,33 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
             }).toList(),
           ),
         if (books.isNotEmpty)
-          ExpansionTile(
+          MikazukiExpansionTile(
             title: Text('Books (${books.length})'),
-            initiallyExpanded: anime.length == 0,
+            initiallyExpanded: true,
             children: books.map((element) {
               return MangaSearchResultItemWidget(element);
             }).toList(),
           ),
         if (miscMedia.isNotEmpty)
-          ExpansionTile(
+          MikazukiExpansionTile(
             title: Text('Miscellaneous (${miscMedia.length})'),
-            initiallyExpanded: anime.length == 0 && books.length == 0,
+            initiallyExpanded: true,
             children: miscMedia.map((element) {
               return AnimeSearchResultItemWidget(element);
             }).toList(),
           ),
         if (data.characters.isNotEmpty)
-          ExpansionTile(
+          MikazukiExpansionTile(
             title: Text('Characters (${data.characters.length})'),
-            initiallyExpanded:
-                anime.isEmpty && books.isEmpty && miscMedia.isEmpty,
+            initiallyExpanded: true,
             children: data.characters.map((element) {
               return CharacterSearchResultItemWidget(element);
             }).toList(),
           ),
         if (data.staff.isNotEmpty)
-          ExpansionTile(
+          MikazukiExpansionTile(
             title: Text('Staff (${data.staff.length})'),
-            initiallyExpanded: anime.isEmpty &&
-                books.isEmpty &&
-                miscMedia.isEmpty &&
-                data.characters.isEmpty,
+            initiallyExpanded: true,
             children: data.staff.map((element) {
               return StaffSearchResultItemWidget(element);
             }).toList(),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mikazuki/mobile/constants.dart';
+import 'package:mikazuki/mobile/widgets/search/SearchFilter.dart';
 
-typedef void QueryCallback(String query);
+typedef void QueryCallback(String query, List<SearchFilter> _filterSettings);
 
 class AniListSearchAppBar extends StatefulWidget
     implements PreferredSizeWidget {
@@ -26,14 +27,16 @@ class AniListSearchAppBar extends StatefulWidget
 
 class _AniListSearchAppBarState extends State<AniListSearchAppBar> {
   TextEditingController _textController;
+  List<SearchFilter> _checkedFormats;
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController(text: this.widget.query);
+    _checkedFormats = [];
 
     if (this.widget.query != null && this.widget.query.length > 0) {
-      this.widget.onSearchTrigger(this.widget.query);
+      this.widget.onSearchTrigger(this.widget.query, _checkedFormats);
     }
   }
 
@@ -50,7 +53,8 @@ class _AniListSearchAppBarState extends State<AniListSearchAppBar> {
       title: TextField(
         autocorrect: true,
         controller: _textController,
-        onSubmitted: this.widget.onSearchTrigger,
+        onSubmitted: (String query) =>
+            this.widget.onSearchTrigger(query, _checkedFormats),
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.search,
         decoration: InputDecoration(
@@ -86,6 +90,59 @@ class _AniListSearchAppBarState extends State<AniListSearchAppBar> {
               ),
             ),
           ),
+        PopupMenuButton<SearchFilter>(
+          tooltip: 'Search filters',
+          padding: EdgeInsets.zero,
+          icon: Icon(Icons.sort),
+          offset: Offset(0, 56.0),
+          onSelected: (SearchFilter result) {
+            if (_checkedFormats.contains(result)) {
+              _checkedFormats.remove(result);
+              return;
+            } else {
+              _checkedFormats.add(result);
+              return;
+            }
+          },
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<SearchFilter>>[
+            PopupMenuItem(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Search filters',
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    'Enabling any of these filters means exclusively searching for the checked types',
+                    style: TextStyle(fontSize: 12),
+                  )
+                ],
+              ),
+            ),
+            CheckedPopupMenuItem<SearchFilter>(
+              checked: _checkedFormats.contains(SearchFilter.Anime),
+              value: SearchFilter.Anime,
+              child: Text('Anime'),
+            ),
+            CheckedPopupMenuItem<SearchFilter>(
+              checked: _checkedFormats.contains(SearchFilter.Books),
+              value: SearchFilter.Books,
+              child: Text('Books'),
+            ),
+            CheckedPopupMenuItem<SearchFilter>(
+              checked: _checkedFormats.contains(SearchFilter.Characters),
+              value: SearchFilter.Characters,
+              child: Text('Characters'),
+            ),
+            CheckedPopupMenuItem<SearchFilter>(
+              checked: _checkedFormats.contains(SearchFilter.Staff),
+              value: SearchFilter.Staff,
+              child: Text('Staff'),
+            ),
+          ],
+        ),
       ],
     );
   }
