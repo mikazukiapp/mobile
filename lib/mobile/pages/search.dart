@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mikazuki/mobile/widgets/scaffold/drawer.dart';
 import 'package:mikazuki/mobile/widgets/search/appBar.dart';
 import 'package:mikazuki/mobile/widgets/search/overview.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
@@ -50,6 +51,7 @@ class _SearchScreenWidgetState extends State<SearchScreenWidget> {
         searchResult: searchResult,
         isLoading: _isLoading,
       ),
+      drawer: MikazukiDrawer(),
     );
   }
 }
