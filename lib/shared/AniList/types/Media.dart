@@ -17,6 +17,7 @@ class AniListMedia {
   final int volumes;
   final int averageScore;
   final int meanScore;
+  final bool isAdult;
   final AniListMediaType type;
   final AniListMediaFormat format;
   final AniListCoverImage coverImage;
@@ -33,6 +34,7 @@ class AniListMedia {
     this.volumes,
     this.averageScore,
     this.meanScore,
+    this.isAdult,
     this.type,
     this.format,
     this.status,
@@ -53,6 +55,33 @@ class AniListMedia {
         return 'Releasing';
       default:
         return 'Status unknown';
+    }
+  }
+
+  String get formatTitle {
+    switch (this.format) {
+      case AniListMediaFormat.Manga:
+        return 'Manga';
+      case AniListMediaFormat.Movie:
+        return 'Movie';
+      case AniListMediaFormat.Music:
+        return 'Music video';
+      case AniListMediaFormat.Novel:
+        return 'Novel';
+      case AniListMediaFormat.ONA:
+        return 'ONA';
+      case AniListMediaFormat.OVA:
+        return 'OVA';
+      case AniListMediaFormat.OneShot:
+        return 'One Shot';
+      case AniListMediaFormat.Special:
+        return 'Special';
+      case AniListMediaFormat.TV:
+        return 'TV Anime';
+      case AniListMediaFormat.TVShort:
+        return 'Short TV Anime';
+      default:
+        return 'Format unknown';
     }
   }
 
