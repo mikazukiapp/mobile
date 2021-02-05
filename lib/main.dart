@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive/hive.dart';
@@ -13,7 +14,10 @@ Future main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AniListUserAvatarAdapter());
 
-  runApp(MikazukiApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
+    (_) => runApp(MikazukiApp()),
+  );
 }
 
 class MikazukiApp extends StatefulWidget {

@@ -27,7 +27,7 @@ class _MobileAppState extends State<MobileApp> {
       title: 'Mikazuki',
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
-      routes: <String, WidgetBuilder> {
+      routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => LoadingScreenWidget(),
         '/login': (BuildContext context) => LoginScreenWidget(),
         '/search': (BuildContext context) => SearchScreenWidget(),
