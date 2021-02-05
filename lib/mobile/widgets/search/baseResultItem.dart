@@ -75,6 +75,7 @@ abstract class BaseSearchResultItemWidget extends StatelessWidget {
 
     return Container(
       height: 96.0,
+      constraints: BoxConstraints(minWidth: 24.0),
       alignment: Alignment.topCenter,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,15 +84,13 @@ abstract class BaseSearchResultItemWidget extends StatelessWidget {
             Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                Center(
-                  child: SizedBox(
-                    width: 22.0,
-                    height: 22.0,
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.transparent,
-                      value: progressValue,
-                      strokeWidth: 1.0,
-                    ),
+                SizedBox(
+                  width: 22.0,
+                  height: 22.0,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    value: progressValue,
+                    strokeWidth: 1.0,
                   ),
                 ),
                 Text(
