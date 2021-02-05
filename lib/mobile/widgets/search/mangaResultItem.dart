@@ -42,22 +42,22 @@ class MangaSearchResultItemWidget extends BaseSearchResultItemWidget {
       case AniListMediaStatus.Finished:
         return Icon(
           Icons.book,
-          size: 16.0,
+          size: 20.0,
         );
       case AniListMediaStatus.NotYetReleased:
         return Icon(
           Icons.book_online,
-          size: 16.0,
+          size: 20.0,
         );
       case AniListMediaStatus.Releasing:
         return Icon(
           Icons.menu_book_outlined,
-          size: 16.0,
+          size: 20.0,
         );
       default:
         return Icon(
           Icons.error,
-          size: 16.0,
+          size: 20.0,
         );
     }
   }
