@@ -24,7 +24,8 @@ class AniListMedia {
   final AniListTitle title;
   final AniListNextAiringEpisode nextAiringEpisode;
   final AniListMediaStatus status;
-  @JsonKey(ignore: true)
+  // TODO: Find a way to ignore the mediaListEntry as post serialization
+  // @JsonKey(ignore: true)
   AniListUserListEntry mediaListEntry;
 
   AniListMedia({
