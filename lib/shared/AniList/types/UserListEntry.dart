@@ -38,6 +38,25 @@ class AniListUserListEntry {
     return progress + 1 == media.episodes;
   }
 
+  String get statusText {
+    switch (this.status) {
+      case AniListUserListStatus.Current:
+        return 'Current';
+      case AniListUserListStatus.Completed:
+        return 'Completed';
+      case AniListUserListStatus.Dropped:
+        return 'Dropped';
+      case AniListUserListStatus.Paused:
+        return 'Paused';
+      case AniListUserListStatus.Planning:
+        return 'Planning';
+      case AniListUserListStatus.Repeating:
+        return 'Repeating';
+      default:
+        return 'Unknown status';
+    }
+  }
+
   String get progressText {
     if (media?.episodes == null) {
       return '$progress / ?';
