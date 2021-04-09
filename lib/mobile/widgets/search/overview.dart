@@ -31,10 +31,10 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
         .toList();
 
     return ListView(
-      padding: EdgeInsets.all(8.0),
       children: [
         if (anime.isNotEmpty)
           MikazukiExpansionTile(
+            key: PageStorageKey(UniqueKey()),
             title: Text('Anime (${anime.length})'),
             initiallyExpanded: true,
             children: anime.map((element) {
@@ -43,6 +43,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
           ),
         if (books.isNotEmpty)
           MikazukiExpansionTile(
+            key: PageStorageKey(UniqueKey()),
             title: Text('Books (${books.length})'),
             initiallyExpanded: true,
             children: books.map((element) {
@@ -51,6 +52,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
           ),
         if (miscMedia.isNotEmpty)
           MikazukiExpansionTile(
+            key: PageStorageKey(UniqueKey()),
             title: Text('Miscellaneous (${miscMedia.length})'),
             initiallyExpanded: true,
             children: miscMedia.map((element) {
@@ -59,6 +61,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
           ),
         if (data.characters.isNotEmpty)
           MikazukiExpansionTile(
+            key: PageStorageKey(UniqueKey()),
             title: Text('Characters (${data.characters.length})'),
             initiallyExpanded: true,
             children: data.characters.map((element) {
@@ -67,6 +70,7 @@ class _AniListSearchOverviewState extends State<AniListSearchOverview> {
           ),
         if (data.staff.isNotEmpty)
           MikazukiExpansionTile(
+            key: PageStorageKey(UniqueKey()),
             title: Text('Staff (${data.staff.length})'),
             initiallyExpanded: true,
             children: data.staff.map((element) {
