@@ -6,7 +6,7 @@ import 'package:mikazuki/shared/AniList/types/Staff.dart';
 import 'package:mikazuki/shared/AniList/types/StaffLanguage.dart';
 
 class CharacterSearchResultItemWidget extends BaseSearchResultItemWidget {
-  const CharacterSearchResultItemWidget(this.item, {Key key}) : super(key: key);
+  CharacterSearchResultItemWidget(this.item, {Key key}) : super(key: key);
   final AniListCharacter item;
 
   List<AniListStaff> get japaneseVoiceActor {

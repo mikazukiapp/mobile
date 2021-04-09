@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mikazuki/mobile/widgets/search/baseResultItem.dart';
 import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/MediaStatus.dart';
 
 class AnimeSearchResultItemWidget extends BaseSearchResultItemWidget {
-  const AnimeSearchResultItemWidget(this.item, {Key key}) : super(key: key);
+  AnimeSearchResultItemWidget(this.item, {Key key}) : super(key: key);
   final AniListMedia item;
+  final SlidableController _controller = SlidableController();
 
   String get score {
     return item.averageScore?.toString() ?? '?';
   }
 
   String get statusLine {
-    return '${item.episodes?.toString() ?? "Unknown amount of"} episodes';
+    String suffix = item.episodes == 1 ? 'episode' : 'episodes';
+    return '${item.episodes?.toString() ?? "Unknown amount of"} $suffix';
   }
 
   String get bottomLine {
-    return '${item.formatTitle}, ${item.statusTitle}';
+    if (item.mediaListEntry == null) {
+      return 'Not an entry on your list';
+    }
+
+    return '${item.formatTitle}, on ${item.mediaListEntry.statusText} list';
   }
 
   Widget get mediaStatus {
@@ -71,20 +78,46 @@ class AnimeSearchResultItemWidget extends BaseSearchResultItemWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.baseContainer(context, <Widget>[
-      this.heroImage(context, item.id, item.coverImage.getSmallest()),
-      this.textContainer(context, item.title.userPreferred,
-          statusLine: statusLine, bottomLine: bottomLine),
-      this.scoreContainer(context, score, columnChildren: [
-        Spacer(),
-        if (item.isAdult)
-          Icon(
-            Icons.explicit_outlined,
-            color: Colors.red,
-            size: 20.0,
-          ),
-        this.mediaStatus,
+    return Slidable(
+      key: UniqueKey(),
+      controller: _controller,
+      actionPane: SlidableScrollActionPane(),
+      actionExtentRatio: 0.2,
+      dismissal: SlidableDismissal(
+        closeOnCanceled: true,
+        dismissThresholds: <SlideActionType, double>{
+          SlideActionType.primary: 0.5,
+          SlideActionType.secondary: 1.0,
+        },
+        child: SlidableDrawerDismissal(),
+        onWillDismiss: (SlideActionType type) async {
+          return false;
+        },
+      ),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          icon: Icons.info,
+          color: Colors.blue,
+          onTap: () {
+            print('${item.title.userPreferred} called');
+          },
+        ),
+      ],
+      child: this.baseContainer(context, <Widget>[
+        this.heroImage(context, item.id, item.coverImage.getSmallest()),
+        this.textContainer(context, item.title.userPreferred,
+            statusLine: statusLine, bottomLine: bottomLine),
+        this.scoreContainer(context, score, columnChildren: [
+          Spacer(),
+          if (item.isAdult)
+            Icon(
+              Icons.explicit_outlined,
+              color: Colors.red,
+              size: 20.0,
+            ),
+          this.mediaStatus,
+        ]),
       ]),
-    ]);
+    );
   }
 }

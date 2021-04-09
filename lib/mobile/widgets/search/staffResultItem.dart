@@ -3,7 +3,7 @@ import 'package:mikazuki/mobile/widgets/search/baseResultItem.dart';
 import 'package:mikazuki/shared/AniList/types/Staff.dart';
 
 class StaffSearchResultItemWidget extends BaseSearchResultItemWidget {
-  const StaffSearchResultItemWidget(this.item, {Key key}) : super(key: key);
+  StaffSearchResultItemWidget(this.item, {Key key}) : super(key: key);
   final AniListStaff item;
 
   String get statusLine {

@@ -4,7 +4,7 @@ import 'package:mikazuki/shared/AniList/types/Media.dart';
 import 'package:mikazuki/shared/AniList/types/MediaStatus.dart';
 
 class MangaSearchResultItemWidget extends BaseSearchResultItemWidget {
-  const MangaSearchResultItemWidget(this.item, {Key key}) : super(key: key);
+  MangaSearchResultItemWidget(this.item, {Key key}) : super(key: key);
   final AniListMedia item;
 
   String get score {
@@ -19,7 +19,11 @@ class MangaSearchResultItemWidget extends BaseSearchResultItemWidget {
   }
 
   String get bottomLine {
-    return '${item.formatTitle}, ${item.statusTitle}';
+    if (item.mediaListEntry == null) {
+      return 'Not an entry on your list';
+    }
+
+    return '${item.formatTitle}, on ${item.mediaListEntry.statusText} list';
   }
 
   Widget get mediaStatus {

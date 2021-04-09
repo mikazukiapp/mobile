@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseSearchResultItemWidget extends StatelessWidget {
-  const BaseSearchResultItemWidget({Key key}) : super(key: key);
+  BaseSearchResultItemWidget({Key key}) : super(key: key);
 
   Widget baseContainer(BuildContext context, List<Widget> children) {
     return Container(
-      padding: EdgeInsets.only(bottom: 4.0, top: 4.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
