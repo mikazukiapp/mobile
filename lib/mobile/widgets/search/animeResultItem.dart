@@ -99,6 +99,7 @@ class AnimeSearchResultItemWidget extends BaseSearchResultItemWidget {
           icon: Icons.info,
           color: Colors.blue,
           onTap: () {
+            // TODO: Navigate to info page here
             print('${item.title.userPreferred} called');
           },
         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
-import 'package:mikazuki/mobile/pages/AniList/Overview.dart';
+import 'package:mikazuki/mobile/pages/AniList/Overview2.dart';
 import 'package:mikazuki/mobile/pages/login.dart';
 import 'package:mikazuki/mobile/widgets/util/NoAnimationMaterialPageRoute.dart';
 import 'package:mikazuki/shared/AniList/AniListRepository.dart';
@@ -30,7 +30,7 @@ class _LoadingScreenWidget extends State<LoadingScreenWidget> {
       if (token != null && token.isNotEmpty) {
         Navigator.of(context).pushAndRemoveUntil(
             NoAnimationMaterialPageRoute(
-                builder: (context) => AniListOverviewWidget()),
+                builder: (context) => NewAniListOverviewWidget()),
             (route) => false);
       } else {
         Navigator.of(context).pushReplacement(

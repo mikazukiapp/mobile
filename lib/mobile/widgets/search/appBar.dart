@@ -90,59 +90,99 @@ class _AniListSearchAppBarState extends State<AniListSearchAppBar> {
               ),
             ),
           ),
-        PopupMenuButton<SearchFilter>(
-          tooltip: 'Search filters',
-          padding: EdgeInsets.zero,
-          icon: Icon(Icons.sort),
-          offset: Offset(0, 56.0),
-          onSelected: (SearchFilter result) {
-            if (_checkedFormats.contains(result)) {
-              _checkedFormats.remove(result);
-              return;
-            } else {
-              _checkedFormats.add(result);
-              return;
-            }
-          },
-          itemBuilder: (BuildContext context) => <PopupMenuEntry<SearchFilter>>[
-            PopupMenuItem(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Search filters',
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    'Enabling any of these filters means exclusively searching for the checked types',
-                    style: TextStyle(fontSize: 12),
-                  )
-                ],
-              ),
-            ),
-            CheckedPopupMenuItem<SearchFilter>(
-              checked: _checkedFormats.contains(SearchFilter.Anime),
-              value: SearchFilter.Anime,
-              child: Text('Anime'),
-            ),
-            CheckedPopupMenuItem<SearchFilter>(
-              checked: _checkedFormats.contains(SearchFilter.Books),
-              value: SearchFilter.Books,
-              child: Text('Books'),
-            ),
-            CheckedPopupMenuItem<SearchFilter>(
-              checked: _checkedFormats.contains(SearchFilter.Characters),
-              value: SearchFilter.Characters,
-              child: Text('Characters'),
-            ),
-            CheckedPopupMenuItem<SearchFilter>(
-              checked: _checkedFormats.contains(SearchFilter.Staff),
-              value: SearchFilter.Staff,
-              child: Text('Staff'),
-            ),
-          ],
-        ),
+        if (!this.widget.isLoading)
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              this
+                  .widget
+                  .onSearchTrigger(_textController.text, _checkedFormats);
+            },
+          ),
+        // PopupMenuButton(
+        //   tooltip: 'Search filters',
+        //   padding: EdgeInsets.zero,
+        //   icon: Icon(Icons.sort),
+        //   offset: Offset(0, 56.0),
+        //   onSelected: (SearchFilter result) {
+        //     setState(() {
+        //       if (_checkedFormats.contains(result)) {
+        //         _checkedFormats.remove(result);
+        //       } else {
+        //         _checkedFormats.add(result);
+        //       }
+        //     });
+        //   },
+        // itemBuilder: (BuildContext context) {
+        //   return [
+        //     PopupMenuItem(
+        //       child: Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         mainAxisAlignment: MainAxisAlignment.start,
+        //         children: [
+        //           Text(
+        //             'Search filters',
+        //             textAlign: TextAlign.left,
+        //           ),
+        //           Text(
+        //             'Enabling any of these filters means exclusively searching for the checked types',
+        //             style: TextStyle(fontSize: 12),
+        //           )
+        //         ],
+        //       ),
+        //     ),
+        //     CheckedPopupMenuItem<SearchFilter>(
+        //       checked: _checkedFormats.contains(SearchFilter.Anime),
+        //       value: SearchFilter.Anime,
+        //       child: Text('Anime'),
+        //     ),
+        //     CheckedPopupMenuItem<SearchFilter>(
+        //       checked: _checkedFormats.contains(SearchFilter.Books),
+        //       value: SearchFilter.Books,
+        //       child: Text('Books'),
+        //     ),
+        //     CheckedPopupMenuItem<SearchFilter>(
+        //       checked: _checkedFormats.contains(SearchFilter.Characters),
+        //       value: SearchFilter.Characters,
+        //       child: Text('Characters'),
+        //     ),
+        //     CheckedPopupMenuItem<SearchFilter>(
+        //       checked: _checkedFormats.contains(SearchFilter.Staff),
+        //       value: SearchFilter.Staff,
+        //       child: Text('Staff'),
+        //     ),
+        //     PopupMenuItem(
+        //       child: Row(
+        //         children: <Widget>[
+        //           FlatButton.icon(
+        //             icon: Icon(Icons.close),
+        //             label: Text('Deselect all'),
+        //             onPressed: () {
+        //               setState(() {
+        //                 _checkedFormats.clear();
+        //               });
+        //             },
+        //           ),
+        //           FlatButton.icon(
+        //             icon: Icon(Icons.check),
+        //             label: Text('Select all'),
+        //             onPressed: () {
+        //               setState(() {
+        //                 _checkedFormats = [
+        //                   SearchFilter.Anime,
+        //                   SearchFilter.Books,
+        //                   SearchFilter.Characters,
+        //                   SearchFilter.Staff,
+        //                 ];
+        //               });
+        //             },
+        //           ),
+        //         ],
+        //       ),
+        //     )
+        //   ];
+        // },
+        // ),
       ],
     );
   }

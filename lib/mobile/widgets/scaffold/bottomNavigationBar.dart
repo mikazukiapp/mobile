@@ -12,14 +12,14 @@ class MikazukiBottomNavBarState extends State<MikazukiBottomNavBar> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.search), label: 'Search'),
+        BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Anime'),
+        BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Manga'),
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
       ],
       currentIndex: _currentIndex,
       selectedItemColor: Colors.green[500],
       showUnselectedLabels: false,
-      showSelectedLabels: false,
+      showSelectedLabels: true,
       onTap: (int index) {
         setState(() {
           _currentIndex = index;
