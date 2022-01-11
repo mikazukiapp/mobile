@@ -41,4 +41,4 @@ In case you want to write an email, check out the Imprint of the official Mikazu
 <br />
 
 # License
-GNU General Public License v3.0
+AGPL v3.0
